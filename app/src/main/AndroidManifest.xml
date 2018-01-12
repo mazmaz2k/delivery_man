@@ -8,6 +8,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -49,7 +50,16 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".AllClients"
-            android:label="@string/title_activity_all_clients"></activity>
+            android:label="@string/title_activity_all_clients" />
+        <activity android:name=".NewTask" />
+        <activity
+            android:name=".ShowAllTasks"
+            android:label="@string/title_activity_show_all_tasks"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="axeleration.com.finalproject.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

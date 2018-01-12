@@ -9,16 +9,16 @@ final class Constants {
 
     static final String CREATE_SQL_TABLE_CLIENTS = "CREATE TABLE " +
             Constants.CLIENTS.TABLE_NAME + " (" +
-            Constants.CLIENTS._ID + " INTEGER, " +
+            Constants.CLIENTS._ID + " INTEGER PRIMARY KEY, " +
             CLIENTS.FULL_NAME + " TEXT, " +
-            CLIENTS.PHONE_NUMBER + " TEXT PRIMARY KEY, " +
+            CLIENTS.PHONE_NUMBER + " TEXT UNIQUE, " +
             CLIENTS.ADDRESS + " TEXT)";
 
     static final String CREATE_SQL_TABLE_TASKS = "CREATE TABLE " +
             Constants.TASKS.TABLE_NAME + " (" +
-            Constants.TASKS._ID + " INTEGER, " +
+            Constants.TASKS._ID + " INTEGER PRIMARY KEY, " +
             TASKS.FULL_NAME + " TEXT, " +
-            TASKS.PHONE_NUMBER + " TEXT PRIMARY KEY, " +
+            TASKS.PHONE_NUMBER + " TEXT, " +
             TASKS.ADDRESS + " TEXT, " +
             TASKS.CLIENT_ID + " TEXT)";
     static final String REMOVE_SQL_TABLE_CLIENTS = "DROP TABLE IF EXISTS " + Constants.CLIENTS.TABLE_NAME;

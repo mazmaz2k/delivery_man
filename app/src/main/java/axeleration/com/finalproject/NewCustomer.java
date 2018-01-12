@@ -73,6 +73,7 @@ public class NewCustomer extends AppCompatActivity {
                         client_id = postToDB(name, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1);
                         if(client_id != -1) {
                             postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id);
+                            //todo:  post check
                             Toast.makeText(NewCustomer.this, "new user added successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {

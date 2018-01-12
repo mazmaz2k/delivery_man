@@ -113,11 +113,12 @@
                 android:src="@mipmap/all_tasks"
                 android:layout_gravity="center"
                 style="@style/Widget.AppCompat.Button.Borderless"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Tasks"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:text="test1" />
         </LinearLayout>
 
 
@@ -137,8 +138,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Finish Tasks"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:text="test2" />
         </LinearLayout>
 
 

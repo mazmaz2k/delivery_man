@@ -15,25 +15,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Client Name: "/>
+            android:text="@string/receiver_name"/>
 
         <TextView
             android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Phone Number: "/>
+            android:text="@string/phone_number"/>
     </LinearLayout>
     <Button
-        android:id="@+id/addTaskBtn"
+        android:id="@+id/nevigateToLoacationBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_task"/>
-    <Button
-        android:id="@+id/showTskBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/show_tasks"/>
+        android:text="@string/navigate_to_location"/>
+
     <Button
         android:id="@+id/call"
         android:layout_width="wrap_content"

@@ -7,13 +7,19 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class AllClients extends AppCompatActivity {
+import java.sql.SQLData;
 
+public class ShowAllTasks extends AppCompatActivity {
 
-    private ListView list;
-
+    private Cursor cursor;
+    private  ListView view;
+    private  DBHelper dbHelper;
+    private SQLiteDatabase db;
+    private TaskCursorAdapter adapter;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -21,8 +27,14 @@ public class AllClients extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    cursor=db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME+" DESC");
+                    view.setAdapter(adapter);
+
                     return true;
                 case R.id.navigation_dashboard:
+                    cursor=db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME+" DESC");
+                    view.setAdapter(adapter);
+
                     return true;
                 case R.id.navigation_notifications:
                     return true;
@@ -34,16 +46,14 @@ public class AllClients extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_clients);
+        setContentView(R.layout.activity_show_all_tasks);
 
-        DBHelper dbHelper = new DBHelper(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        list = findViewById(R.id.listView);
-        Cursor cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
-        ClientCursorAdapter adapter = new ClientCursorAdapter(this, cursor);
-        list.setAdapter(adapter);
-
+        view =findViewById(R.id.listViewTaskes);
+        dbHelper =new DBHelper(this);
+        db=dbHelper.getReadableDatabase();
+        cursor= db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,null);
+         adapter=new TaskCursorAdapter(this,cursor);
+        view.setAdapter(adapter);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
