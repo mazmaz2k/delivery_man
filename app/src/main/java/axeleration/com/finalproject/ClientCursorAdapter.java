@@ -30,7 +30,7 @@ public class ClientCursorAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return inflater.inflate(R.layout.list_item, parent, false);
+        return inflater.inflate(R.layout.client_item, parent, false);
     }
 
     @Override
@@ -38,8 +38,18 @@ public class ClientCursorAdapter extends CursorAdapter {
         TextView text = view.findViewById(R.id.name);
         TextView phone = view.findViewById(R.id.phone);
         Button newTask = view.findViewById(R.id.addTaskBtn);
+        Button showAllTasks = view.findViewById(R.id.showTskBtn);
         final int id = cursor.getInt(cursor.getColumnIndex(Constants.CLIENTS._ID));
         final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER));
+        showAllTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ShowAllTasks.class);
+                i.putExtra("client_id", id);
+                Log.d("temp", " send " + id);
+                context.startActivity(i);
+            }
+        });
         newTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,17 +86,16 @@ public class ClientCursorAdapter extends CursorAdapter {
 
     }
 
-//    @Override
 //    public void onClick(View v) {
 //        switch (v.getId()){
 //            case R.id.showTskBtn:
-////                Intent i = new Intent(context,NewTask.class);
-////                i.putExtra("client_id",id);
-////                Log.d("temp"," send "+id);
-////                context.startActivity(i);
+//                Intent i = new Intent(context,NewTask.class);
+//                i.putExtra("client_id",id);
+//                Log.d("temp"," send "+id);
+//                context.startActivity(i);
 //              break;
 //            case R.id.call:
-//                call();
+//             //   call();
 //                break;
 //        }
 //    }

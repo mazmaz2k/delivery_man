@@ -26,4 +26,9 @@
     <string name="title_activity_show_all_tasks">ShowAllTasks</string>
     <string name="navigate_to_location">Navigate To Location</string>
     <string name="receiver_name">Receiver Name:</string>
+    <string name="standard">standard</string>
+    <string name="sort_by_name">Sort by name</string>
+    <string name="sort_by_date">Sort by date</string>
+    <string name="standard_2">Default</string>
+    <string name="sort_by_address">sort by address</string>
 </resources>

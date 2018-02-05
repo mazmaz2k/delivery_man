@@ -19,6 +19,7 @@ public class NewTask extends AppCompatActivity {
         setContentView(R.layout.activity_new_task);
         final int client_id = getIntent().getIntExtra("client_id",0);
         Log.d("temp",""+client_id);
+
         final EditText name = findViewById(R.id.fullNameEditTextNT);
         final EditText phone = findViewById(R.id.phoneNumberEditTextNT);
         final EditText city = findViewById(R.id.cityAddressNT);
@@ -64,10 +65,10 @@ public class NewTask extends AppCompatActivity {
         values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + aparement);
         long x = db.insert(Constants.TASKS.TABLE_NAME, null, values);
         if(x != -1) {
-            Toast.makeText(NewTask.this, "new user added successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NewTask.this, "new task added successfully", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(NewTask.this, "pakage already exists!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NewTask.this, "package already exists!", Toast.LENGTH_SHORT).show();
         }
     }
 }
