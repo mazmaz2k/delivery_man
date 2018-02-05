@@ -62,9 +62,10 @@ public class TaskCursorAdapter extends CursorAdapter {
         navigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, MapsActivity.class);
-                i.putExtra("receiver_address", address);
-                Log.d("temp", " address send " + address);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("google.navigation:q=" + address));
+//                i.putExtra("receiver_address", address);
+//                Log.d("temp", " address send " + address);
                 context.startActivity(i);
             }
         });
