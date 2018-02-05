@@ -3,29 +3,32 @@ package axeleration.com.finalproject;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    public static final int REQUEST_CODE=1234;
+    public static final int REQUEST_CODE = 1234;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},REQUEST_CODE);
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS},REQUEST_CODE);
 
         }
         ImageButton addTask = findViewById(R.id.addNewTaskBtn);
         ImageButton allClients = findViewById(R.id.allClients);
-        ImageButton allTaskes = findViewById(R.id.allTasksBtn);
-        allTaskes.setOnClickListener(this);
+        ImageButton allTask = findViewById(R.id.allTasksBtn);
+        allTask.setOnClickListener(this);
         allClients.setOnClickListener(this);
         addTask.setOnClickListener(this);
-
     }
 
     @Override
@@ -43,6 +46,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.allTasksBtn:
                 i = new Intent(MainActivity.this, ShowAllTasks.class);
                 startActivity(i);
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                        grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                        grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

@@ -1,5 +1,7 @@
 package axeleration.com.finalproject;
 
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -7,27 +9,102 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class NewTask extends AppCompatActivity {
 
+    private int selectedDate, selectedMonth, selectedYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
         final int client_id = getIntent().getIntExtra("client_id",0);
-        Log.d("temp",""+client_id);
 
         final EditText name = findViewById(R.id.fullNameEditTextNT);
         final EditText phone = findViewById(R.id.phoneNumberEditTextNT);
         final EditText city = findViewById(R.id.cityAddressNT);
         final EditText street = findViewById(R.id.streetAddressNT);
-        final EditText aparement = findViewById(R.id.apartmentNumberNT);
+        final EditText apartment = findViewById(R.id.apartmentNumberNT);
         final EditText time = findViewById(R.id.timeToDeliverNT);
         final EditText date = findViewById(R.id.dateToDeliverNT);
 
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(NewTask.this);
+                dialog.setContentView(R.layout.timepicker);
+                dialog.show();
+                final TimePicker timePicker = dialog.findViewById(R.id.timePicker1);
+                timePicker.setIs24HourView(false);
+                Button buttonOk = dialog.findViewById(R.id.okBtn);
+
+                buttonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            String strTime = timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute();
+                            time.setText(strTime);
+                            dialog.dismiss();
+                    }
+                });
+            }
+        });
+
+        date.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // custom dialog
+                final Dialog dialog = new Dialog(NewTask.this);
+                dialog.setContentView(R.layout.datepicker);
+                dialog.setTitle("");
+
+                DatePicker datePicker = dialog.findViewById(R.id.datePicker1);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                selectedDate = calendar.get(Calendar.DAY_OF_MONTH);
+                selectedMonth = calendar.get(Calendar.MONTH);
+                selectedYear = calendar.get(Calendar.YEAR);
+                datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+
+                    @Override
+                    public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
+
+                        if(selectedDate ==dayOfMonth && selectedMonth==month && selectedYear==year) {
+
+                            date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                            dialog.dismiss();
+                        }else {
+
+                            if(selectedDate !=dayOfMonth){
+                                date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                dialog.dismiss();
+                            }else {
+                                if(selectedMonth !=month){
+                                    date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
+                        selectedDate=dayOfMonth;
+                        selectedMonth=(month);
+                        selectedYear=year;
+                    }
+                });
+
+
+                dialog.show();
+            }
+
+        });
         Button sumBtn=findViewById(R.id.sum_new_task_btn);
         sumBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -37,12 +114,13 @@ public class NewTask extends AppCompatActivity {
                 String phoneReceiver = phone.getText().toString();
                 String cityReceiver = city.getText().toString();
                 String streetReceiver = street.getText().toString();
-                String apartmentReceiver = aparement.getText().toString();
+                String apartmentReceiver = apartment.getText().toString();
                 String timeReceiver = time.getText().toString();
-                String dateReceiver = date.getText().toString();
+//                String dateReceiver = date.getText().toString();
+
 //                Log.d("temp","1 "+nameReceiver+"2 "+phoneReceiver+"3 "+cityReceiver+"4 "+streetReceiver+"5 "+apartmentReceiver+"6 "+timeReceiver+"7 "+dateReceiver);
 
-                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){
+                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,date.toString())){
 //                    Log.d("temp","2222222222222");
                     postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,client_id);
                 }
