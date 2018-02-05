@@ -55,8 +55,19 @@ public class TaskCursorAdapter extends CursorAdapter {
         TextView phone = view.findViewById(R.id.phone);
         final int id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS.CLIENT_ID));
         final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
-
+        Button navigate=view.findViewById(R.id.nevigateToLoacationBtn);
         Button callBtm = view.findViewById(R.id.call);
+        final String address = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, MapsActivity.class);
+                i.putExtra("receiver_address", address);
+                Log.d("temp", " address send " + address);
+                context.startActivity(i);
+            }
+        });
         callBtm.setOnClickListener(new View.OnClickListener() {
 
             @Override
