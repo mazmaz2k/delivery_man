@@ -122,14 +122,18 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:hint="@string/date_to_deliver"
-            android:inputType="datetime"/>
+            android:inputType="datetime"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
         <EditText
             android:id="@+id/timeToDeliver"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:hint="@string/time_to_deliver"
-            android:inputType="datetime"/>
+            android:inputType="time"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package axeleration.com.finalproject;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -8,13 +9,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class NewCustomer extends AppCompatActivity {
 
     private CheckBox checkBox;
+    private int selectedDate, selectedMonth, selectedYear;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,73 @@ public class NewCustomer extends AppCompatActivity {
                     view.setVisibility(View.INVISIBLE);
                 else {
                     view.setVisibility(View.VISIBLE);
+                    receiverTime.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Dialog dialog = new Dialog(NewCustomer.this);
+                            dialog.setContentView(R.layout.timepicker);
+                            dialog.show();
+                            final TimePicker timePicker = dialog.findViewById(R.id.timePicker1);
+                            timePicker.setIs24HourView(false);
+                            Button buttonOk = dialog.findViewById(R.id.okBtn);
+
+                            buttonOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String strTime = timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute();
+                                    receiverTime.setText(strTime);
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                    receiverDate.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            // custom dialog
+
+                            final Dialog dialog = new Dialog(NewCustomer.this);
+                            dialog.setContentView(R.layout.datepicker);
+                            dialog.setTitle("");
+
+                            DatePicker datePicker = dialog.findViewById(R.id.datePicker1);
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTimeInMillis(System.currentTimeMillis());
+                            selectedDate = calendar.get(Calendar.DAY_OF_MONTH);
+                            selectedMonth = calendar.get(Calendar.MONTH);
+                            selectedYear = calendar.get(Calendar.YEAR);
+                            datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+
+                                @Override
+                                public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
+
+                                    if(selectedDate ==dayOfMonth && selectedMonth==month && selectedYear==year) {
+
+                                        receiverDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                        dialog.dismiss();
+                                    }else {
+
+                                        if(selectedDate !=dayOfMonth){
+                                            receiverDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                            dialog.dismiss();
+                                        }else {
+                                            if(selectedMonth !=month){
+                                                receiverDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                                dialog.dismiss();
+                                            }
+                                        }
+                                    }
+                                    selectedDate=dayOfMonth;
+                                    selectedMonth=(month);
+                                    selectedYear=year;
+                                }
+                            });
+
+
+                            dialog.show();
+                        }
+
+                    });
                 }
             }
         });
@@ -52,7 +126,7 @@ public class NewCustomer extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name, phone, city, street, apartment, nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver;
+                String name, phone, city, street, apartment, nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver,timeReceiver, dateReceiver;
                 long client_id;
                 name = fullName.getText().toString();
                 phone = phoneNumber.getText().toString();
@@ -69,7 +143,7 @@ public class NewCustomer extends AppCompatActivity {
                     timeReceiver = receiverTime.getText().toString();
                     dateReceiver = receiverDate.getText().toString();
 
-                    if(!checkIfAnyEmpty(name, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver)) {
+                    if(!checkIfAnyEmpty(name, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, receiverTime.getText().toString(), dateReceiver)) {
                         client_id = postToDB(name, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1);
                         if(client_id != -1) {
                             postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id);
