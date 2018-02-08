@@ -112,6 +112,7 @@ public class SignaturePad extends AppCompatActivity {
 
     private void removeFromDB() {
         db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
+
     }
 
     private void sendSMS(String number, String message) {

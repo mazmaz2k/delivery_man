@@ -19,12 +19,10 @@ import android.widget.Toast;
 public class ClientCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
-    private Context context;
 
     public ClientCursorAdapter(Context context, Cursor c) {
 
         super(context, c);
-        this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
@@ -46,7 +44,6 @@ public class ClientCursorAdapter extends CursorAdapter {
             public void onClick(View v) {
                 Intent i = new Intent(context, ShowAllTasks.class);
                 i.putExtra("client_id", id);
-                Log.d("temp", " send " + id);
                 context.startActivity(i);
             }
         });
@@ -55,7 +52,6 @@ public class ClientCursorAdapter extends CursorAdapter {
             public void onClick(View v) {
                 Intent i = new Intent(context, NewTask.class);
                 i.putExtra("client_id", id);
-                Log.d("temp", " send " + id);
                 context.startActivity(i);
             }
         });
@@ -85,18 +81,4 @@ public class ClientCursorAdapter extends CursorAdapter {
         phone.setText(cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)));
 
     }
-
-//    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.showTskBtn:
-//                Intent i = new Intent(context,NewTask.class);
-//                i.putExtra("client_id",id);
-//                Log.d("temp"," send "+id);
-//                context.startActivity(i);
-//              break;
-//            case R.id.call:
-//             //   call();
-//                break;
-//        }
-//    }
 }

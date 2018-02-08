@@ -182,19 +182,19 @@ public class NewCustomer extends AppCompatActivity {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
 
-    private long postToDB(String name, String phone, String city, String street, String aparement, String dbName, long client_id) {
+    private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id) {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         if(dbName.equals(Constants.CLIENTS.TABLE_NAME)) {
             values.put(Constants.CLIENTS.FULL_NAME, name);
             values.put(Constants.CLIENTS.PHONE_NUMBER, phone);
-            values.put(Constants.CLIENTS.ADDRESS, "Israel " + city + " " + street + " " + aparement);
+            values.put(Constants.CLIENTS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         } else {
             values.put(Constants.TASKS.FULL_NAME, name);
             values.put(Constants.TASKS.PHONE_NUMBER, phone);
             values.put(Constants.TASKS.CLIENT_ID, client_id);
-            values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + aparement);
+            values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         }
         return db.insert(dbName, null, values);
     }

@@ -13,9 +13,9 @@ public class AllClients extends AppCompatActivity {
 
 
     private ListView list;
-    private DBHelper dbHelper;
     private SQLiteDatabase db;
-    private  ClientCursorAdapter adapter;
+    private ClientCursorAdapter adapter;
+    private Cursor cursor;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -23,13 +23,13 @@ public class AllClients extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    sortCange(0);
+                    sortChange(0);
                     return true;
                 case R.id.navigation_dashboard:
-                    sortCange(1);
+                    sortChange(1);
                     return true;
                 case R.id.navigation_notifications:
-                    sortCange(2);
+                    sortChange(2);
                     return true;
             }
             return false;
@@ -41,32 +41,35 @@ public class AllClients extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_clients);
 
-        dbHelper= new DBHelper(this);
+        DBHelper dbHelper= new DBHelper(this);
         db = dbHelper.getReadableDatabase();
 
         list = findViewById(R.id.listView);
-        Cursor cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
+        cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
         adapter = new ClientCursorAdapter(this, cursor);
         list.setAdapter(adapter);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    public void sortCange(int idx){
+    public void sortChange(int idx){
         if(idx==0){
-            Cursor cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
-            adapter = new ClientCursorAdapter(this, cursor);
-            list.setAdapter(adapter);
+            cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
         }else if(idx==1){
-            Cursor cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, Constants.CLIENTS.FULL_NAME);
-            adapter = new ClientCursorAdapter(this, cursor);
-            list.setAdapter(adapter);
+            cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, Constants.CLIENTS.FULL_NAME);
         }else if(idx==2){
-            Cursor cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, Constants.CLIENTS.ADDRESS);
-            adapter = new ClientCursorAdapter(this, cursor);
-            list.setAdapter(adapter);
+            cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, Constants.CLIENTS.ADDRESS);
         }
+        adapter = new ClientCursorAdapter(this, cursor);
+        list.setAdapter(adapter);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cursor.close();
+        db.close();
     }
 }

@@ -1,24 +1,17 @@
 package axeleration.com.finalproject;
 
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class NewTask extends AppCompatActivity {
 
@@ -116,12 +109,9 @@ public class NewTask extends AppCompatActivity {
                 String streetReceiver = street.getText().toString();
                 String apartmentReceiver = apartment.getText().toString();
                 String timeReceiver = time.getText().toString();
-//                String dateReceiver = date.getText().toString();
 
-//                Log.d("temp","1 "+nameReceiver+"2 "+phoneReceiver+"3 "+cityReceiver+"4 "+streetReceiver+"5 "+apartmentReceiver+"6 "+timeReceiver+"7 "+dateReceiver);
 
                 if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,date.toString())){
-//                    Log.d("temp","2222222222222");
                     postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,client_id);
                 }
             }
@@ -133,14 +123,14 @@ public class NewTask extends AppCompatActivity {
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment, String time, String date) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
-    private void postToDB(String name, String phone, String city, String street, String aparement, long client_id) {
+    private void postToDB(String name, String phone, String city, String street, String apartment, long client_id) {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(Constants.TASKS.FULL_NAME, name);
         values.put(Constants.TASKS.PHONE_NUMBER, phone);
         values.put(Constants.TASKS.CLIENT_ID, client_id);
-        values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + aparement);
+        values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         long x = db.insert(Constants.TASKS.TABLE_NAME, null, values);
         if(x != -1) {
             Toast.makeText(NewTask.this, "new task added successfully", Toast.LENGTH_SHORT).show();

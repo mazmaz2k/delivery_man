@@ -86,6 +86,11 @@ public class TaskCursorAdapter extends CursorAdapter {
         });
         text.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)));
         phone.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER)));
+    }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        Log.d("temp", "aaaaaaaaa");
     }
 }
