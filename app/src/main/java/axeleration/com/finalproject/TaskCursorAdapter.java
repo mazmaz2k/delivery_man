@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class TaskCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, final Cursor cursor) {// TODO: Add name of the client to the sms send.
         TextView text = view.findViewById(R.id.name);
         TextView phone = view.findViewById(R.id.phone);
-//        final int id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS.CLIENT_ID));
+        final int id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS.CLIENT_ID));
         final String receiverPhoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
         final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
         Button navigate=view.findViewById(R.id.nevigateToLoacationBtn);
@@ -45,7 +46,12 @@ public class TaskCursorAdapter extends CursorAdapter {
         doneTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(context, SignaturePad.class);
+                i.putExtra("receiver_name", cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)));
+                i.putExtra("client_id", id);
+                i.putExtra("receiver_id", cursor.getString(cursor.getColumnIndex(Constants.TASKS._ID)));
+                i.putExtra("phone_number", cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER)));
+                context.startActivity(i);
             }
         });
         navigate.setOnClickListener(new View.OnClickListener() {

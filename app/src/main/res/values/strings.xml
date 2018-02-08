@@ -34,4 +34,7 @@
     <string name="permission_not_granted">Permission not granted! The Application may not work properly!</string>
     <string name="ok">OK</string>
     <string name="done">DONE</string>
+    <string name="clear_pad">clear pad</string>
+    <string name="save">save</string>
+    <string name="agreement">agreement</string>
 </resources>
