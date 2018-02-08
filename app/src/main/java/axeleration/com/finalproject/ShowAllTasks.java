@@ -30,12 +30,10 @@ public class ShowAllTasks extends AppCompatActivity {
                 case R.id.navigation_home:
                     cursor=db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME+" DESC");
                     view.setAdapter(adapter);
-
                     return true;
                 case R.id.navigation_dashboard:
                     cursor=db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME+" DESC");
                     view.setAdapter(adapter);
-
                     return true;
                 case R.id.navigation_notifications:
                     return true;

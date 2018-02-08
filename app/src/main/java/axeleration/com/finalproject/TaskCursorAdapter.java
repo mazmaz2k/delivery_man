@@ -41,7 +41,13 @@ public class TaskCursorAdapter extends CursorAdapter {
         Button navigate=view.findViewById(R.id.nevigateToLoacationBtn);
         Button callBtm = view.findViewById(R.id.call);
         final String address = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));
+        Button doneTaskBtn= view.findViewById(R.id.finishedThisTaskBtn);
+        doneTaskBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         navigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

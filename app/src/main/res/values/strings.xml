@@ -23,7 +23,7 @@
     <string name="call">call</string>
     <string name="add_task">Add Task</string>
     <string name="title_activity_show_all_tasks">ShowAllTasks</string>
-    <string name="navigate_to_location">Navigate To Location</string>
+    <string name="navigate_to_location">Navigate</string>
     <string name="receiver_name">Receiver Name:</string>
     <string name="standard">standard</string>
     <string name="sort_by_name">Sort by name</string>
@@ -33,4 +33,5 @@
     <string name="permission_granted">All Permission Granted</string>
     <string name="permission_not_granted">Permission not granted! The Application may not work properly!</string>
     <string name="ok">OK</string>
+    <string name="done">DONE</string>
 </resources>

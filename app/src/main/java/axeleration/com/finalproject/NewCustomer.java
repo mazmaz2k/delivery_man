@@ -143,7 +143,7 @@ public class NewCustomer extends AppCompatActivity {
                     timeReceiver = receiverTime.getText().toString();
                     dateReceiver = receiverDate.getText().toString();
 
-                    if(!checkIfAnyEmpty(name, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, receiverTime.getText().toString(), dateReceiver)) {
+                    if(!checkIfAnyEmpty(name, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver)) {
                         client_id = postToDB(name, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1);
                         if(client_id != -1) {
                             postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id);
