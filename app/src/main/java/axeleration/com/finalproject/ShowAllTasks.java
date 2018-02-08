@@ -22,11 +22,11 @@ public class ShowAllTasks extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    cursor=db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME+" DESC");
+                    cursor=db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,Constants.TASKS.FULL_NAME+" DESC");
                     listView.setAdapter(adapter);
                     return true;
                 case R.id.navigation_dashboard:
-                    cursor=db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME+" DESC");
+                    cursor=db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,Constants.TASKS.FULL_NAME+" DESC");
                     listView.setAdapter(adapter);
                     return true;
                 case R.id.navigation_notifications:
@@ -46,10 +46,10 @@ public class ShowAllTasks extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(this);
         db=dbHelper.getReadableDatabase();
         if(client_id == -1){
-            cursor = db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,null);
+            cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,null);
 
         }else {
-            cursor = db.query(Constants.TASKS.TABLE_NAME, null, Constants.TASKS.CLIENT_ID+"=?", new String[] {String.valueOf(client_id)}, null, null, null);
+            cursor = db.query(Constants.TASKS.TABLE_NAME, null, Constants.TASKS.CLIENT_ID+"=?" +" AND "+Constants.TASKS.IS_SIGN+"=0", new String[] {String.valueOf(client_id)}, null, null, null);
         }
         adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
@@ -60,7 +60,7 @@ public class ShowAllTasks extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cursor = db.query(Constants.TASKS.TABLE_NAME,null,null,null,null,null,null);
+        cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,null);
         adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
     }

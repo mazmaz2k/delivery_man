@@ -3,6 +3,8 @@ package axeleration.com.finalproject;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -102,7 +104,7 @@ public class SignaturePad extends AppCompatActivity {
                 } else {
                     Toast.makeText(SignaturePad.this, "Unable to store the signature", Toast.LENGTH_SHORT).show();
                 }
-                removeFromDB();
+                putToDoneTask();
                 sendSMS(c.getString(c.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)), receiver_name + " just receive the package you sent!");
                 sendSMS(receiver_phone_number, "Dear customer, thank you for receiving the package!");
                 finish();
@@ -110,9 +112,11 @@ public class SignaturePad extends AppCompatActivity {
         });
     }
 
-    private void removeFromDB() {
-        db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
-
+    private void putToDoneTask() {
+        //db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.TASKS.IS_SIGN,1);
+        db.update(Constants.TASKS.TABLE_NAME,cv,Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
     }
 
     private void sendSMS(String number, String message) {

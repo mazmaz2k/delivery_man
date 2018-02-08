@@ -130,6 +130,7 @@ public class NewTask extends AppCompatActivity {
         values.put(Constants.TASKS.FULL_NAME, name);
         values.put(Constants.TASKS.PHONE_NUMBER, phone);
         values.put(Constants.TASKS.CLIENT_ID, client_id);
+        values.put(Constants.TASKS.IS_SIGN, 0);
         values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         long x = db.insert(Constants.TASKS.TABLE_NAME, null, values);
         if(x != -1) {

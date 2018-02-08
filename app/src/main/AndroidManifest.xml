@@ -43,7 +43,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="axeleration.com.finalproject.MainActivity" />
         </activity>
-        <activity android:name=".SignaturePad"></activity>
+        <activity android:name=".SignaturePad" />
+        <activity android:name=".FinishTasks"></activity>
     </application>
 
 </manifest>

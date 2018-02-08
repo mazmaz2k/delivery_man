@@ -91,6 +91,5 @@ public class TaskCursorAdapter extends CursorAdapter {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
-        Log.d("temp", "aaaaaaaaa");
     }
 }

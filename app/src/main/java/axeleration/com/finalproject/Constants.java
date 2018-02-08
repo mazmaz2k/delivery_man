@@ -20,7 +20,8 @@ final class Constants {
             TASKS.FULL_NAME + " TEXT, " +
             TASKS.PHONE_NUMBER + " TEXT, " +
             TASKS.ADDRESS + " TEXT, " +
-            TASKS.CLIENT_ID + " TEXT)";
+            TASKS.CLIENT_ID + " TEXT, " +
+            TASKS.IS_SIGN +" INTEGER)" ;
     static final String REMOVE_SQL_TABLE_CLIENTS = "DROP TABLE IF EXISTS " + Constants.CLIENTS.TABLE_NAME;
     static final String REMOVE_SQL_TABLE_TASKS = "DROP TABLE IF EXISTS " + Constants.TASKS.TABLE_NAME;
 
@@ -42,6 +43,7 @@ final class Constants {
         static final String PHONE_NUMBER = "PHONE_NUMBER";
         static final String CLIENT_ID = "CLIENT_ID";
         static final String ADDRESS = "ADDRESS";
+        static final String IS_SIGN = "IS_SIGN";
     }
 
 }

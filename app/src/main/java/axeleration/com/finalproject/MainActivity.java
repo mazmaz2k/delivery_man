@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageButton addTask = findViewById(R.id.addNewTaskBtn);
         ImageButton allClients = findViewById(R.id.allClients);
         ImageButton allTask = findViewById(R.id.allTasksBtn);
+        ImageButton finishTasks =findViewById(R.id.finishedTaskBtn);
+        finishTasks.setOnClickListener(this);
         allTask.setOnClickListener(this);
         allClients.setOnClickListener(this);
         addTask.setOnClickListener(this);
@@ -52,7 +54,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 i = new Intent(MainActivity.this, ShowAllTasks.class);
                 startActivity(i);
                 break;
-        }
+            case R.id.finishedTaskBtn:
+                i = new Intent(MainActivity.this,FinishTasks.class);
+                startActivity(i);
+                break;
+         }
     }
 
     @Override

@@ -37,4 +37,6 @@
     <string name="clear_pad">clear pad</string>
     <string name="save">save</string>
     <string name="agreement">agreement</string>
+    <string name="sender_name">Sender Name</string>
+    <string name="delete_task">delete Task</string>
 </resources>
