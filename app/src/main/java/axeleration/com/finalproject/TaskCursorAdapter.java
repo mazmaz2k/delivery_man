@@ -36,6 +36,9 @@ public class TaskCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, final Cursor cursor) {// TODO: Add name of the client to the sms send.
         TextView text = view.findViewById(R.id.name);
         TextView phone = view.findViewById(R.id.phone);
+        final int receiver_id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS._ID));
+        final String receiver_phone_number = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
+        final String receiver_name = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
         final int id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS.CLIENT_ID));
         final String receiverPhoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
         final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
@@ -47,10 +50,10 @@ public class TaskCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SignaturePad.class);
-                i.putExtra("receiver_name", cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)));
+                i.putExtra("receiver_name", receiver_name);
                 i.putExtra("client_id", id);
-                i.putExtra("receiver_id", cursor.getString(cursor.getColumnIndex(Constants.TASKS._ID)));
-                i.putExtra("phone_number", cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER)));
+                i.putExtra("receiver_id", receiver_id);
+                i.putExtra("phone_number", receiver_phone_number);
                 context.startActivity(i);
             }
         });

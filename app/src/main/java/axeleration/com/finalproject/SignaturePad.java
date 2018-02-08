@@ -38,7 +38,8 @@ public class SignaturePad extends AppCompatActivity {
     private com.github.gcacace.signaturepad.views.SignaturePad mSignaturePad;
     private Button mClearButton;
     private Button mSaveButton;
-    private String receiver_name, client_name, receiver_phone_number, receiver_id;
+    private int receiver_id;
+    private String receiver_name, client_name, receiver_phone_number;
     private SimpleDateFormat date;
     private SQLiteDatabase db;
     private Cursor c;
@@ -52,7 +53,7 @@ public class SignaturePad extends AppCompatActivity {
         receiver_name = getIntent().getStringExtra("receiver_name");
         int client_id = getIntent().getIntExtra("client_id", -1);
         receiver_phone_number = getIntent().getStringExtra("phone_number");
-        receiver_id = getIntent().getStringExtra("receiver_id");
+        receiver_id = getIntent().getIntExtra("receiver_id", -1);
 
         DBHelper helper = new DBHelper(this);
         db = helper.getReadableDatabase();
@@ -110,8 +111,7 @@ public class SignaturePad extends AppCompatActivity {
     }
 
     private void removeFromDB() {
-        db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{receiver_id});
-        c.requery();
+        db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
     }
 
     private void sendSMS(String number, String message) {
