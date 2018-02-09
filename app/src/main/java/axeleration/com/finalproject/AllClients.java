@@ -41,8 +41,7 @@ public class AllClients extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_clients);
 
-        DBHelper dbHelper= new DBHelper(this);
-        db = dbHelper.getReadableDatabase();
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
 
         list = findViewById(R.id.listView);
         cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);

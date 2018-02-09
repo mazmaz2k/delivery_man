@@ -36,23 +36,15 @@ public class ShowAllTasks extends AppCompatActivity {
         }
     };
 
+    private int client_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all_tasks);
-        final int client_id = getIntent().getIntExtra("client_id",-1);
+        client_id = getIntent().getIntExtra("client_id",-1);
 
         listView = findViewById(R.id.listViewTaskes);
-        DBHelper dbHelper = new DBHelper(this);
-        db=dbHelper.getReadableDatabase();
-        if(client_id == -1){
-            cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,null);
-
-        }else {
-            cursor = db.query(Constants.TASKS.TABLE_NAME, null, Constants.TASKS.CLIENT_ID+"=?" +" AND "+Constants.TASKS.IS_SIGN+"=0", new String[] {String.valueOf(client_id)}, null, null, null);
-        }
-        adapter = new TaskCursorAdapter(this, cursor);
-        listView.setAdapter(adapter);
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -60,7 +52,11 @@ public class ShowAllTasks extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,null);
+        if(client_id == -1){
+            cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,null);
+        }else {
+            cursor = db.query(Constants.TASKS.TABLE_NAME, null, Constants.TASKS.CLIENT_ID+"=?" +" AND "+Constants.TASKS.IS_SIGN+"=0", new String[] {String.valueOf(client_id)}, null, null, null);
+        }
         adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
     }

@@ -17,14 +17,17 @@ public class FinishTasks extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_tasks);
-         listView = findViewById(R.id.listViewFinishTaskes);
-        DBHelper dbHelper = new DBHelper(this);
-        db=dbHelper.getWritableDatabase();
+        listView = findViewById(R.id.listViewFinishTaskes);
+        db = DBHelperSingleton.getInstanceDBHelper(this).getWritableDatabase();
         cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=1",null,null,null,null);
         adapter = new FinishCursorAdapter(this, cursor);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
-
     }
 
+   public void updateList() {
+       cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=1",null,null,null,null);
+       adapter = new FinishCursorAdapter(this, cursor);
+       listView.setAdapter(adapter);
+   }
 }

@@ -54,6 +54,8 @@ public class TaskCursorAdapter extends CursorAdapter {
                 i.putExtra("client_id", id);
                 i.putExtra("receiver_id", receiver_id);
                 i.putExtra("phone_number", receiver_phone_number);
+                Log.d("temp", "receiver_id " + receiver_id + " receiver_name " + receiver_name);
+
                 context.startActivity(i);
             }
         });

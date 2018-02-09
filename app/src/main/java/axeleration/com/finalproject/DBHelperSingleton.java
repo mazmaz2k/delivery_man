@@ -4,9 +4,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBHelper extends SQLiteOpenHelper {
-    public DBHelper(Context context) {
+public class DBHelperSingleton extends SQLiteOpenHelper {
+
+    private static DBHelperSingleton helper;
+
+    private DBHelperSingleton(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
+    }
+
+    static DBHelperSingleton getInstanceDBHelper(Context context) {
+        if(helper == null) {
+            helper = new DBHelperSingleton(context);
+        }
+        return helper;
     }
 
     @Override

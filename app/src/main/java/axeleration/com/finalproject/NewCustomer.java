@@ -21,12 +21,15 @@ public class NewCustomer extends AppCompatActivity {
 
     private CheckBox checkBox;
     private int selectedDate, selectedMonth, selectedYear;
+    private SQLiteDatabase db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_customer);
+
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
 
         checkBox = findViewById(R.id.addNewTaskCheckBox);
         final EditText fullName = findViewById(R.id.fullNameEditText);
@@ -183,8 +186,6 @@ public class NewCustomer extends AppCompatActivity {
     }
 
     private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id) {
-        DBHelper dbHelper = new DBHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         if(dbName.equals(Constants.CLIENTS.TABLE_NAME)) {
             values.put(Constants.CLIENTS.FULL_NAME, name);

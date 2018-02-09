@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,9 @@ public class ClientCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
 
-    public ClientCursorAdapter(Context context, Cursor c) {
+    ClientCursorAdapter(Context context, Cursor c) {
 
-        super(context, c);
+        super(context, c, false);
         inflater = LayoutInflater.from(context);
     }
 

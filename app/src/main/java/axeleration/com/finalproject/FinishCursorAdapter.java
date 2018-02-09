@@ -1,31 +1,28 @@
 package axeleration.com.finalproject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by mazma on 08/02/2018.
- */
 
 public class FinishCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
     private SQLiteDatabase db;
-    public FinishCursorAdapter(Context context, Cursor c) {
-        super(context, c);
-        inflater = LayoutInflater.from(context);
 
+    FinishCursorAdapter(Context context, Cursor c) {
+        super(context, c, false);
+        inflater = LayoutInflater.from(context);
+        db = DBHelperSingleton.getInstanceDBHelper(context).getReadableDatabase();
     }
 
     @Override
@@ -34,29 +31,31 @@ public class FinishCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(final View view, final Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         TextView name = view.findViewById(R.id.name);
         TextView phone = view.findViewById(R.id.phone);
-        TextView senderName =view.findViewById(R.id.senderName);
+        TextView senderName = view.findViewById(R.id.senderName);
         final int receiver_id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS._ID));
-        final String receiver_phone_number = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
-        final String receiver_name = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
-        final int id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS.CLIENT_ID));
-        final String receiverPhoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
-        final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
         Button deleteTask = view.findViewById(R.id.deleteTask);
         deleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper dbHelper = new DBHelper(context);
-                db=dbHelper.getReadableDatabase();
-                db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
-                Toast.makeText(context, "remove item", Toast.LENGTH_SHORT).show();
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure you want to delete this?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
+                                Toast.makeText(context, "This row has been deleted.", Toast.LENGTH_SHORT).show();
+                                ((FinishTasks)context).updateList();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {}
+                        });
+                builder.create().show();
             }
-
         });
-        senderName.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.CLIENT_ID)));
+        senderName.setText(String.valueOf(receiver_id));
         name.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)));
         phone.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER)));
     }

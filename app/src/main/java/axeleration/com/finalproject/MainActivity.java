@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Manifest.permission.WRITE_EXTERNAL_STORAGE },REQUEST_CODE);
 
         }
+
         ImageButton addTask = findViewById(R.id.addNewTaskBtn);
         ImageButton allClients = findViewById(R.id.allClients);
         ImageButton allTask = findViewById(R.id.allTasksBtn);
@@ -40,25 +41,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Intent i;
+        Intent i = null;
         switch (v.getId()) {
             case R.id.addNewTaskBtn:
                 i = new Intent(MainActivity.this, NewCustomer.class);
-                startActivity(i);
                 break;
             case R.id.allClients:
                 i = new Intent(MainActivity.this, AllClients.class);
-                startActivity(i);
                 break;
             case R.id.allTasksBtn:
                 i = new Intent(MainActivity.this, ShowAllTasks.class);
-                startActivity(i);
                 break;
             case R.id.finishedTaskBtn:
                 i = new Intent(MainActivity.this,FinishTasks.class);
-                startActivity(i);
                 break;
          }
+        startActivity(i);
     }
 
     @Override

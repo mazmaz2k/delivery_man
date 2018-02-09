@@ -16,11 +16,15 @@ import java.util.Calendar;
 public class NewTask extends AppCompatActivity {
 
     private int selectedDate, selectedMonth, selectedYear;
+    private SQLiteDatabase db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
         final int client_id = getIntent().getIntExtra("client_id",0);
 
         final EditText name = findViewById(R.id.fullNameEditTextNT);
@@ -124,8 +128,6 @@ public class NewTask extends AppCompatActivity {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
     private void postToDB(String name, String phone, String city, String street, String apartment, long client_id) {
-        DBHelper dbHelper = new DBHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(Constants.TASKS.FULL_NAME, name);
         values.put(Constants.TASKS.PHONE_NUMBER, phone);

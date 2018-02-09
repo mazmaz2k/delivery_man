@@ -57,8 +57,7 @@ public class SignaturePad extends AppCompatActivity {
         receiver_phone_number = getIntent().getStringExtra("phone_number");
         receiver_id = getIntent().getIntExtra("receiver_id", -1);
 
-        DBHelper helper = new DBHelper(this);
-        db = helper.getReadableDatabase();
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
 
         c = db.query(Constants.CLIENTS.TABLE_NAME, null,Constants.CLIENTS._ID + "=?",  new String[]{String.valueOf(client_id)}, null, null,null );
         c.moveToFirst();
