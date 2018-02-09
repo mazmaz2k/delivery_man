@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Manifest.permission.WRITE_EXTERNAL_STORAGE },REQUEST_CODE);
 
         }
-
+        ImageButton dailyAssignments= findViewById(R.id.daily_assignments);
         ImageButton addTask = findViewById(R.id.addNewTaskBtn);
         ImageButton allClients = findViewById(R.id.allClients);
         ImageButton allTask = findViewById(R.id.allTasksBtn);
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         allTask.setOnClickListener(this);
         allClients.setOnClickListener(this);
         addTask.setOnClickListener(this);
+        dailyAssignments.setOnClickListener(this);
     }
 
     @Override
@@ -55,7 +56,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.finishedTaskBtn:
                 i = new Intent(MainActivity.this,FinishTasks.class);
                 break;
-         }
+            case  R.id.daily_assignments:
+                i = new Intent(MainActivity.this,DailyAssignments.class);
+                break;
+
+        }
         startActivity(i);
     }
 

@@ -39,4 +39,6 @@
     <string name="agreement">agreement</string>
     <string name="sender_name">Sender Name</string>
     <string name="delete_task">delete Task</string>
+    <string name="daily_assignments">Daily assignments</string>
+    <string name="date">Date</string>
 </resources>

@@ -116,10 +116,10 @@ public class NewTask extends AppCompatActivity {
                 String streetReceiver = street.getText().toString();
                 String apartmentReceiver = apartment.getText().toString();
                 String timeReceiver = time.getText().toString();
+                String dateReceiver= date.getText().toString();
 
-
-                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,date.toString())){
-                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, date.toString(), time.toString());
+                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){
+                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, timeReceiver);
                 }
             }
         });

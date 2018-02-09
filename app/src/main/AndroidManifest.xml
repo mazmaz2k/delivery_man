@@ -44,7 +44,8 @@
                 android:value="axeleration.com.finalproject.MainActivity" />
         </activity>
         <activity android:name=".SignaturePad" />
-        <activity android:name=".FinishTasks"></activity>
+        <activity android:name=".FinishTasks" />
+        <activity android:name=".DailyAssignments"></activity>
     </application>
 
 </manifest>

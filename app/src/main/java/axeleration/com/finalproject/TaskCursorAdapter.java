@@ -36,6 +36,9 @@ public class TaskCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, final Cursor cursor) {// TODO: Add name of the client to the sms send.
         TextView text = view.findViewById(R.id.name);
         TextView phone = view.findViewById(R.id.phone);
+        TextView date =view.findViewById(R.id.date);
+        final String receiverDate = cursor.getString(cursor.getColumnIndex(Constants.TASKS.DATE));
+
         final int receiver_id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS._ID));
         final String receiver_phone_number = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
         final String receiver_name = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
@@ -86,6 +89,7 @@ public class TaskCursorAdapter extends CursorAdapter {
                 context.startActivity(intent);
             }
         });
+        date.setText(receiverDate);
         text.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)));
         phone.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER)));
     }

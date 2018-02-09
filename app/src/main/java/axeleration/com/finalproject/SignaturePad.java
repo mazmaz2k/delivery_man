@@ -134,8 +134,11 @@ public class SignaturePad extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        c.close();
-        db.close();
+        if(c.getCount()<=0){
+             c.close();
+              db.close();
+        }
+
     }
 
     @Override
