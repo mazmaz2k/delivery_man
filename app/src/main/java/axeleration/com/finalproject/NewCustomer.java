@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.util.Calendar;
 
 public class NewCustomer extends AppCompatActivity {
@@ -22,7 +21,6 @@ public class NewCustomer extends AppCompatActivity {
     private CheckBox checkBox;
     private int selectedDate, selectedMonth, selectedYear;
     private SQLiteDatabase db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +30,17 @@ public class NewCustomer extends AppCompatActivity {
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
 
         checkBox = findViewById(R.id.addNewTaskCheckBox);
-        final EditText fullName = findViewById(R.id.fullNameEditText);
-        final EditText phoneNumber = findViewById(R.id.phoneNumberEditText);
-        final EditText cityField = findViewById(R.id.cityAddress);
-        final EditText streetField = findViewById(R.id.streetAddress);
-        final EditText apartmentNumber = findViewById(R.id.apartmentNumber);
+        final EditText clientName = findViewById(R.id.fullNameEditText);
+        final EditText clientPhone = findViewById(R.id.phoneNumberEditText);
+        final EditText clientCity = findViewById(R.id.cityAddress);
+        final EditText clientStreet = findViewById(R.id.streetAddress);
+        final EditText clientApartmentNumber = findViewById(R.id.apartmentNumber);
 
         final EditText receiverName = findViewById(R.id.fullNameEditTextReceiver);
         final EditText receiverPhone = findViewById(R.id.phoneNumberEditTextReceiver);
         final EditText receiverCity = findViewById(R.id.cityAddressReceiver);
         final EditText receiverStreet = findViewById(R.id.streetAddressReceiver);
-        final EditText receiverApartment = findViewById(R.id.apartmentNumberReceiver);
+        final EditText receiverApartmentNumber = findViewById(R.id.apartmentNumberReceiver);
         final EditText receiverTime = findViewById(R.id.timeToDeliver);
         final EditText receiverDate = findViewById(R.id.dateToDeliver);
 
@@ -67,7 +65,13 @@ public class NewCustomer extends AppCompatActivity {
                             buttonOk.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    String strTime = timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute();
+                                    int minutes = timePicker.getCurrentMinute();
+                                    String strTime;
+                                    if(minutes < 10) {
+                                        strTime = timePicker.getCurrentHour() + ":0" + minutes;
+                                    } else {
+                                        strTime = timePicker.getCurrentHour() + ":" + minutes;
+                                    }
                                     receiverTime.setText(strTime);
                                     dialog.dismiss();
                                 }
@@ -94,28 +98,27 @@ public class NewCustomer extends AppCompatActivity {
                                 @Override
                                 public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
 
-                                    if(selectedDate ==dayOfMonth && selectedMonth==month && selectedYear==year) {
+                                    if(selectedDate == dayOfMonth && selectedMonth == month && selectedYear == year) {
 
                                         receiverDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                                         dialog.dismiss();
                                     }else {
 
-                                        if(selectedDate !=dayOfMonth){
+                                        if(selectedDate != dayOfMonth){
                                             receiverDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                                             dialog.dismiss();
                                         }else {
-                                            if(selectedMonth !=month){
+                                            if(selectedMonth != month){
                                                 receiverDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                                                 dialog.dismiss();
                                             }
                                         }
                                     }
-                                    selectedDate=dayOfMonth;
-                                    selectedMonth=(month);
-                                    selectedYear=year;
+                                    selectedDate = dayOfMonth;
+                                    selectedMonth = month;
+                                    selectedYear = year;
                                 }
                             });
-
 
                             dialog.show();
                         }
@@ -129,45 +132,47 @@ public class NewCustomer extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name, phone, city, street, apartment, nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver,timeReceiver, dateReceiver;
+                String nameClient, phone, city, street, apartment, nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver,timeReceiver, dateReceiver;
                 long client_id;
-                name = fullName.getText().toString();
-                phone = phoneNumber.getText().toString();
-                city = cityField.getText().toString();
-                street = streetField.getText().toString();
-                apartment = apartmentNumber.getText().toString();
+                nameClient = clientName.getText().toString();
+                phone = clientPhone.getText().toString();
+                city = clientCity.getText().toString();
+                street = clientStreet.getText().toString();
+                apartment = clientApartmentNumber.getText().toString();
 
                 if(checkBox.isChecked()) {
                     nameReceiver = receiverName.getText().toString();
                     phoneReceiver = receiverPhone.getText().toString();
                     cityReceiver = receiverCity.getText().toString();
                     streetReceiver = receiverStreet.getText().toString();
-                    apartmentReceiver = receiverApartment.getText().toString();
+                    apartmentReceiver = receiverApartmentNumber.getText().toString();
                     timeReceiver = receiverTime.getText().toString();
                     dateReceiver = receiverDate.getText().toString();
 
-                    if(!checkIfAnyEmpty(name, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver)) {
-                        client_id = postToDB(name, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1);
+                    if(!checkIfAnyEmpty(nameClient, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver)) {
+                        client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , "");
                         if(client_id != -1) {
-                            postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id);
-                            //todo:  post check
-                            Toast.makeText(NewCustomer.this, "new user added successfully", Toast.LENGTH_SHORT).show();
+                            if(postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id, nameClient, dateReceiver, timeReceiver) == -1) {
+                                Toast.makeText(NewCustomer.this, "Cannot add the task, Some error occurred!", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(NewCustomer.this, "User and task added successfully", Toast.LENGTH_SHORT).show();
+                            }
                             finish();
                         } else {
-                            Toast.makeText(NewCustomer.this, "user already exists!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewCustomer.this, "User with this phone number already exists!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(NewCustomer.this, "Please make sure all the fields are filled.", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    if(!checkIfAnyEmpty(name, phone, city, street, apartment)) {
-                        client_id = postToDB(name, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1);
+                    if(!checkIfAnyEmpty(nameClient, phone, city, street, apartment)) {
+                        client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , "");
                         if(client_id != -1) {
-                            Toast.makeText(NewCustomer.this, "new user added successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewCustomer.this, "User added successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
-                            Toast.makeText(NewCustomer.this, "user already exists!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewCustomer.this, "User with this phone number already exists!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(NewCustomer.this, "Please make sure all the fields are filled.", Toast.LENGTH_SHORT).show();
@@ -185,7 +190,7 @@ public class NewCustomer extends AppCompatActivity {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
 
-    private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id) {
+    private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id, String client_name, String date, String time) {
         ContentValues values = new ContentValues();
         if(dbName.equals(Constants.CLIENTS.TABLE_NAME)) {
             values.put(Constants.CLIENTS.FULL_NAME, name);
@@ -196,8 +201,17 @@ public class NewCustomer extends AppCompatActivity {
             values.put(Constants.TASKS.PHONE_NUMBER, phone);
             values.put(Constants.TASKS.CLIENT_ID, client_id);
             values.put(Constants.TASKS.IS_SIGN, 0);
+            values.put(Constants.TASKS.CLIENT_NAME, client_name);
+            values.put(Constants.TASKS.DATE, date);
+            values.put(Constants.TASKS.TIME, time);
             values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         }
         return db.insert(dbName, null, values);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }

@@ -25,8 +25,8 @@ public class NewTask extends AppCompatActivity {
         setContentView(R.layout.activity_new_task);
 
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        final int client_id = getIntent().getIntExtra("client_id",0);
-
+        final int clientId = getIntent().getIntExtra("client_id",0);
+        final String clientName = getIntent().getStringExtra("clientName");
         final EditText name = findViewById(R.id.fullNameEditTextNT);
         final EditText phone = findViewById(R.id.phoneNumberEditTextNT);
         final EditText city = findViewById(R.id.cityAddressNT);
@@ -48,9 +48,15 @@ public class NewTask extends AppCompatActivity {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                            String strTime = timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute();
-                            time.setText(strTime);
-                            dialog.dismiss();
+                        int minutes = timePicker.getCurrentMinute();
+                        String strTime;
+                        if(minutes < 10) {
+                            strTime = timePicker.getCurrentHour() + ":0" + minutes;
+                        } else {
+                            strTime = timePicker.getCurrentHour() + ":" + minutes;
+                        }
+                        time.setText(strTime);
+                        dialog.dismiss();
                     }
                 });
             }
@@ -75,29 +81,26 @@ public class NewTask extends AppCompatActivity {
                     @Override
                     public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
 
-                        if(selectedDate ==dayOfMonth && selectedMonth==month && selectedYear==year) {
-
+                        if(selectedDate == dayOfMonth && selectedMonth == month && selectedYear == year) {
                             date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                             dialog.dismiss();
                         }else {
 
-                            if(selectedDate !=dayOfMonth){
+                            if(selectedDate != dayOfMonth){
                                 date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                                 dialog.dismiss();
                             }else {
-                                if(selectedMonth !=month){
+                                if(selectedMonth != month){
                                     date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                                     dialog.dismiss();
                                 }
                             }
                         }
-                        selectedDate=dayOfMonth;
-                        selectedMonth=(month);
-                        selectedYear=year;
+                        selectedDate = dayOfMonth;
+                        selectedMonth = month;
+                        selectedYear = year;
                     }
                 });
-
-
                 dialog.show();
             }
 
@@ -116,7 +119,7 @@ public class NewTask extends AppCompatActivity {
 
 
                 if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,date.toString())){
-                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,client_id);
+                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, date.toString(), time.toString());
                 }
             }
         });
@@ -127,19 +130,28 @@ public class NewTask extends AppCompatActivity {
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment, String time, String date) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
-    private void postToDB(String name, String phone, String city, String street, String apartment, long client_id) {
+    private void postToDB(String name, String phone, String city, String street, String apartment, long client_id, String clientName, String date, String time) {
         ContentValues values = new ContentValues();
         values.put(Constants.TASKS.FULL_NAME, name);
         values.put(Constants.TASKS.PHONE_NUMBER, phone);
+        values.put(Constants.TASKS.CLIENT_NAME, clientName);
+        values.put(Constants.TASKS.DATE, date);
+        values.put(Constants.TASKS.TIME, time);
         values.put(Constants.TASKS.CLIENT_ID, client_id);
         values.put(Constants.TASKS.IS_SIGN, 0);
         values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         long x = db.insert(Constants.TASKS.TABLE_NAME, null, values);
         if(x != -1) {
-            Toast.makeText(NewTask.this, "new task added successfully", Toast.LENGTH_SHORT).show();
-            finish();
+            Toast.makeText(NewTask.this, "New task added successfully", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(NewTask.this, "package already exists!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NewTask.this, "Some error occurred", Toast.LENGTH_SHORT).show();
         }
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }

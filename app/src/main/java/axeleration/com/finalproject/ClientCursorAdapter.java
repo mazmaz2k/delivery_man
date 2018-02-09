@@ -32,7 +32,8 @@ public class ClientCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
-        TextView text = view.findViewById(R.id.name);
+        final TextView text = view.findViewById(R.id.name);
+        final String clientName = cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.FULL_NAME));
         TextView phone = view.findViewById(R.id.phone);
         Button newTask = view.findViewById(R.id.addTaskBtn);
         Button showAllTasks = view.findViewById(R.id.showTskBtn);
@@ -50,6 +51,7 @@ public class ClientCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, NewTask.class);
+                i.putExtra("clientName", cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.FULL_NAME)));
                 i.putExtra("client_id", id);
                 context.startActivity(i);
             }
@@ -76,7 +78,7 @@ public class ClientCursorAdapter extends CursorAdapter {
                 context.startActivity(intent);
             }
         });
-        text.setText(cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.FULL_NAME)));
+        text.setText(clientName);
         phone.setText(cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)));
 
     }
