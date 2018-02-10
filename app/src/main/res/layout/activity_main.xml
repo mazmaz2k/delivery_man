@@ -128,7 +128,7 @@
             android:orientation="vertical"
             android:layout_weight="1">
             <ImageButton
-                android:id="@+id/test3"
+                android:id="@+id/statics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/finish_tasks"
@@ -139,13 +139,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="test2" />
+                android:text="@string/statics" />
         </LinearLayout>
-
 
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent">
+    <ListView
+        android:id="@+id/listViewMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+    </LinearLayout>
 
 
 

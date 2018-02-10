@@ -117,7 +117,8 @@ public class NewTask extends AppCompatActivity {
                 String apartmentReceiver = apartment.getText().toString();
                 String timeReceiver = time.getText().toString();
                 String dateReceiver= date.getText().toString();
-
+                
+                String dateTime=createDateTime(dateReceiver,timeReceiver);
                 if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){
                     postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, timeReceiver);
                 }
@@ -126,17 +127,33 @@ public class NewTask extends AppCompatActivity {
 
     }
 
+    private String createDateTime(String dateReceiver, String timeReceiver) {
+        String[] strings=dateReceiver.split("/");
+        String res;
+        if(!(Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
+            return strings[2] + "-" + strings[1] + "-0" + strings[0] + " " + timeReceiver + ":00";
+        }else  if((Integer.parseInt(strings[1])<10)&&!(Integer.parseInt(strings[0])<10)){
+            return strings[2]+"-0"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
+
+        }else if((Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
+
+            return strings[2]+"-0"+strings[1]+"-0"+strings[0]+" "+timeReceiver+":00";
+
+        }
+        return strings[2]+"-"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
+    }
+
 
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment, String time, String date) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
-    private void postToDB(String name, String phone, String city, String street, String apartment, long client_id, String clientName, String date, String time) {
+    private void postToDB(String name, String phone, String city, String street, String apartment, long client_id, String clientName, String date, String dateTime) {
         ContentValues values = new ContentValues();
         values.put(Constants.TASKS.FULL_NAME, name);
         values.put(Constants.TASKS.PHONE_NUMBER, phone);
         values.put(Constants.TASKS.CLIENT_NAME, clientName);
         values.put(Constants.TASKS.DATE, date);
-        values.put(Constants.TASKS.TIME, time);
+        values.put(Constants.TASKS.DATETIME, dateTime);
         values.put(Constants.TASKS.CLIENT_ID, client_id);
         values.put(Constants.TASKS.IS_SIGN, 0);
         values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
@@ -149,9 +166,5 @@ public class NewTask extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
-    }
+
 }

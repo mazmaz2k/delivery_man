@@ -131,15 +131,14 @@ public class SignaturePad extends AppCompatActivity {
         SmsManager.getDefault().sendTextMessage(number, null, message, null, null );
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(c.getCount()<=0){
-             c.close();
-              db.close();
-        }
-
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if(c.getCount()<=0){
+//            c.close();
+//            db.close();
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

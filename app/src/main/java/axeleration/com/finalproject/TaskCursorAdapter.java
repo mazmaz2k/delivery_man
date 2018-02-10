@@ -37,8 +37,9 @@ public class TaskCursorAdapter extends CursorAdapter {
         TextView text = view.findViewById(R.id.name);
         TextView phone = view.findViewById(R.id.phone);
         TextView date =view.findViewById(R.id.date);
+        TextView time =view.findViewById(R.id.time);
         final String receiverDate = cursor.getString(cursor.getColumnIndex(Constants.TASKS.DATE));
-
+        final String reciverTime= cursor.getString(cursor.getColumnIndex(Constants.TASKS.DATETIME));
         final int receiver_id = cursor.getInt(cursor.getColumnIndex(Constants.TASKS._ID));
         final String receiver_phone_number = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
         final String receiver_name = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
@@ -89,6 +90,7 @@ public class TaskCursorAdapter extends CursorAdapter {
                 context.startActivity(intent);
             }
         });
+        time.setText(reciverTime);
         date.setText(receiverDate);
         text.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)));
         phone.setText(cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER)));

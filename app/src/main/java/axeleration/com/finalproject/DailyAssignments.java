@@ -24,9 +24,8 @@ public class DailyAssignments extends AppCompatActivity {
         setContentView(R.layout.activity_daily_assignments);
 
         listView = findViewById(R.id.listViewTaskes);
-        getTodayDate();
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        cursor=db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0 AND "+Constants.TASKS.DATE + "=?",new String[]{ getTodayDate()},null,null,Constants.TASKS.TIME+" ASC");
+        cursor=db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0 AND "+Constants.TASKS.DATE + "=?",new String[]{ getTodayDate()},null,null,Constants.TASKS.DATETIME+" ASC");
         adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
 
@@ -34,10 +33,8 @@ public class DailyAssignments extends AppCompatActivity {
 
     private String getTodayDate (){
         SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
-        Log.d("temp",""+sdf.format(new Date()));
+      //  Log.d("temp",""+sdf.format(new Date()));
         return sdf.format(new Date());
-
-
     }
 
 

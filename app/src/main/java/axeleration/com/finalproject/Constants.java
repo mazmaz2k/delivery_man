@@ -24,7 +24,7 @@ final class Constants {
             TASKS.IS_SIGN +" INTEGER, " +
             TASKS.CLIENT_NAME + " TEXT, " +
             TASKS.DATE + " DATE, " +
-            TASKS.TIME + " TEXT)";
+            TASKS.DATETIME + " DATETIME)";
 
     static final String REMOVE_SQL_TABLE_CLIENTS = "DROP TABLE IF EXISTS " + Constants.CLIENTS.TABLE_NAME;
     static final String REMOVE_SQL_TABLE_TASKS = "DROP TABLE IF EXISTS " + Constants.TASKS.TABLE_NAME;
@@ -50,7 +50,7 @@ final class Constants {
         static final String IS_SIGN = "IS_SIGN";
         static final String CLIENT_NAME = "CLIENT_NAME";
         static final String DATE = "DATE";
-        static final String TIME = "TIME";
+        static final String DATETIME = "DATETIME";
     }
 
 }

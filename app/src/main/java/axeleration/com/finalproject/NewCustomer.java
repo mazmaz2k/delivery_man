@@ -152,7 +152,7 @@ public class NewCustomer extends AppCompatActivity {
                     if(!checkIfAnyEmpty(nameClient, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver)) {
                         client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , "");
                         if(client_id != -1) {
-                            if(postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id, nameClient, dateReceiver, timeReceiver) == -1) {
+                            if(postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id, nameClient, dateReceiver, createDateTime(dateReceiver,timeReceiver)) == -1) {
                                 Toast.makeText(NewCustomer.this, "Cannot add the task, Some error occurred!", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(NewCustomer.this, "User and task added successfully", Toast.LENGTH_SHORT).show();
@@ -181,7 +181,21 @@ public class NewCustomer extends AppCompatActivity {
             }
         });
     }
+    private String createDateTime(String dateReceiver, String timeReceiver) {
+        String[] strings=dateReceiver.split("/");
+        String res;
+        if(!(Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
+            return strings[2] + "-" + strings[1] + "-0" + strings[0] + " " + timeReceiver + ":00";
+        }else  if((Integer.parseInt(strings[1])<10)&&!(Integer.parseInt(strings[0])<10)){
+            return strings[2]+"-0"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
 
+        }else if((Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
+
+            return strings[2]+"-0"+strings[1]+"-0"+strings[0]+" "+timeReceiver+":00";
+
+        }
+        return strings[2]+"-"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
+    }
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") ;
     }
@@ -190,7 +204,7 @@ public class NewCustomer extends AppCompatActivity {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
 
-    private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id, String client_name, String date, String time) {
+    private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id, String client_name, String date, String dateTime) {
         ContentValues values = new ContentValues();
         if(dbName.equals(Constants.CLIENTS.TABLE_NAME)) {
             values.put(Constants.CLIENTS.FULL_NAME, name);
@@ -203,7 +217,7 @@ public class NewCustomer extends AppCompatActivity {
             values.put(Constants.TASKS.IS_SIGN, 0);
             values.put(Constants.TASKS.CLIENT_NAME, client_name);
             values.put(Constants.TASKS.DATE, date);
-            values.put(Constants.TASKS.TIME, time);
+            values.put(Constants.TASKS.DATETIME, dateTime);
             values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         }
         return db.insert(dbName, null, values);
