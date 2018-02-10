@@ -42,18 +42,25 @@ public class NewTask extends AppCompatActivity {
                 dialog.setContentView(R.layout.timepicker);
                 dialog.show();
                 final TimePicker timePicker = dialog.findViewById(R.id.timePicker1);
-                timePicker.setIs24HourView(false);
+                timePicker.setIs24HourView(true);
                 Button buttonOk = dialog.findViewById(R.id.okBtn);
 
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int minutes = timePicker.getCurrentMinute();
+                        int hours = timePicker.getCurrentHour();
                         String strTime;
-                        if(minutes < 10) {
-                            strTime = timePicker.getCurrentHour() + ":0" + minutes;
+                        String strHour;
+                        if(hours < 10) {
+                            strHour = "0" + hours;
                         } else {
-                            strTime = timePicker.getCurrentHour() + ":" + minutes;
+                            strHour = String.valueOf(hours);
+                        }
+                        if(minutes < 10) {
+                            strTime = strHour + ":0" + minutes;
+                        } else {
+                            strTime = strHour + ":" + minutes;
                         }
                         time.setText(strTime);
                         dialog.dismiss();
@@ -82,16 +89,16 @@ public class NewTask extends AppCompatActivity {
                     public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
 
                         if(selectedDate == dayOfMonth && selectedMonth == month && selectedYear == year) {
-                            date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                            date.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                             dialog.dismiss();
                         }else {
 
                             if(selectedDate != dayOfMonth){
-                                date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                date.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                                 dialog.dismiss();
                             }else {
                                 if(selectedMonth != month){
-                                    date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                    date.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                                     dialog.dismiss();
                                 }
                             }
@@ -120,7 +127,7 @@ public class NewTask extends AppCompatActivity {
                 
                 String dateTime=createDateTime(dateReceiver,timeReceiver);
                 if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){
-                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, timeReceiver);
+                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, dateTime);
                 }
             }
         });
@@ -128,8 +135,7 @@ public class NewTask extends AppCompatActivity {
     }
 
     private String createDateTime(String dateReceiver, String timeReceiver) {
-        String[] strings=dateReceiver.split("/");
-        String res;
+        String[] strings = dateReceiver.split("-");
         if(!(Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
             return strings[2] + "-" + strings[1] + "-0" + strings[0] + " " + timeReceiver + ":00";
         }else  if((Integer.parseInt(strings[1])<10)&&!(Integer.parseInt(strings[0])<10)){
@@ -138,7 +144,6 @@ public class NewTask extends AppCompatActivity {
         }else if((Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
 
             return strings[2]+"-0"+strings[1]+"-0"+strings[0]+" "+timeReceiver+":00";
-
         }
         return strings[2]+"-"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
     }
@@ -165,6 +170,4 @@ public class NewTask extends AppCompatActivity {
         }
         finish();
     }
-
-
 }

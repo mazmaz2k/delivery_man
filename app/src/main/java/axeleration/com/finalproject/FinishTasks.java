@@ -50,10 +50,4 @@ public class FinishTasks extends AppCompatActivity {
        builder.create().show();
    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        cursor.close();
-        db.close();
-    }
 }

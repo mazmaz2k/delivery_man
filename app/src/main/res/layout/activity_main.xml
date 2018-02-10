@@ -149,11 +149,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorAccent">
-    <ListView
-        android:id="@+id/listViewMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        <ListView
+            android:id="@+id/listViewMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
     </LinearLayout>
 
 

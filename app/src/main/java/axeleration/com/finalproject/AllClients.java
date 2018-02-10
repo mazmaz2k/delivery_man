@@ -64,11 +64,4 @@ public class AllClients extends AppCompatActivity {
         list.setAdapter(adapter);
 
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        cursor.close();
-        db.close();
-    }
 }
