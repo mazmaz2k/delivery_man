@@ -15,24 +15,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".NewCustomer"
-            android:parentActivityName=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_TASK" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:parentActivityName=".MainActivity"
+            android:label="@string/register_new_client">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="axeleration.com.finalproject.MainActivity" />
+    </activity>
+
         <activity
             android:name=".AllClients"
-            android:label="@string/title_activity_all_clients" />
-        <activity android:name=".NewTask" />
+            android:label="@string/title_activity_all_clients"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="axeleration.com.finalproject.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".NewTask"
+            android:label="Register New Task"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="axeleration.com.finalproject.MainActivity" />
+        </activity>
+
         <activity
             android:name=".ShowAllTasks"
             android:label="@string/title_activity_show_all_tasks"
@@ -41,9 +58,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="axeleration.com.finalproject.MainActivity" />
         </activity>
+
         <activity android:name=".SignaturePad" />
-        <activity android:name=".FinishTasks" />
-        <activity android:name=".DailyAssignments" />
+
+        <activity
+            android:name=".FinishTasks"
+            android:label="@string/finish_tasks_label"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="axeleration.com.finalproject.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".DailyAssignments"
+            android:label="@string/daily_tasks_label"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="axeleration.com.finalproject.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

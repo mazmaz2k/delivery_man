@@ -101,7 +101,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0 AND " + Constants.TASKS.DATETIME + ">=? AND " + Constants.TASKS.DATETIME + "<?",new String[]{getCurrentDate() ,getDate()},null ,null,null,null);
+        cursor = db.query(Constants.TASKS.TABLE_NAME,
+                null,
+                Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
+                new String[] {"0", getCurrentDate(), getDate()},
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
         TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);

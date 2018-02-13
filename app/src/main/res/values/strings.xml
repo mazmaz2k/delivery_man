@@ -15,14 +15,14 @@
     <string name="parcel_id">Parcel Destination</string>
     <string name="time_to_deliver">Time To Deliver</string>
     <string name="date_to_deliver">Date To Deliver</string>
-    <string name="title_activity_all_clients">AllClients</string>
+    <string name="title_activity_all_clients">All Clients</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="show_tasks">Show Tasks</string>
     <string name="call">call</string>
     <string name="add_task">Add Task</string>
-    <string name="title_activity_show_all_tasks">ShowAllTasks</string>
+    <string name="title_activity_show_all_tasks">All Tasks</string>
     <string name="navigate_to_location">Nav</string>
     <string name="receiver_name">Receiver Name:</string>
     <string name="standard">standard</string>
@@ -39,8 +39,11 @@
     <string name="agreement">agreement</string>
     <string name="sender_name">Sender Name</string>
     <string name="delete_task">delete Task</string>
-    <string name="daily_assignments">Daily assignments</string>
+    <string name="daily_assignments">Daily Assignments</string>
     <string name="date">Date</string>
     <string name="statics">Statics</string>
     <string name="time">time</string>
+    <string name="register_new_client">Register New Client</string>
+    <string name="finish_tasks_label">Finish Tasks</string>
+    <string name="daily_tasks_label">Daily Tasks</string>
 </resources>
