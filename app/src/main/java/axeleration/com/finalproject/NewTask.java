@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NewTask extends AppCompatActivity {
 
@@ -78,6 +79,7 @@ public class NewTask extends AppCompatActivity {
                 dialog.setTitle("");
 
                 DatePicker datePicker = dialog.findViewById(R.id.datePicker1);
+                datePicker.setMinDate(new Date().getTime());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 selectedDate = calendar.get(Calendar.DAY_OF_MONTH);
@@ -87,18 +89,18 @@ public class NewTask extends AppCompatActivity {
 
                     @Override
                     public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-
+                String dateString = dayOfMonth + "-" + (month + 1) + "-" + year;
                         if(selectedDate == dayOfMonth && selectedMonth == month && selectedYear == year) {
-                            date.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                            date.setText(dateString);
                             dialog.dismiss();
                         }else {
 
                             if(selectedDate != dayOfMonth){
-                                date.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                                date.setText(dateString);
                                 dialog.dismiss();
                             }else {
                                 if(selectedMonth != month){
-                                    date.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                                    date.setText(dateString);
                                     dialog.dismiss();
                                 }
                             }

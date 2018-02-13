@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NewCustomer extends AppCompatActivity {
 
@@ -95,6 +96,7 @@ public class NewCustomer extends AppCompatActivity {
                             dialog.setTitle("");
 
                             DatePicker datePicker = dialog.findViewById(R.id.datePicker1);
+                            datePicker.setMinDate(new Date().getTime());
                             Calendar calendar = Calendar.getInstance();
                             calendar.setTimeInMillis(System.currentTimeMillis());
                             selectedDate = calendar.get(Calendar.DAY_OF_MONTH);

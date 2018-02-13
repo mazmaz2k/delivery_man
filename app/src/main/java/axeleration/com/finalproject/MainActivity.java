@@ -9,22 +9,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     public static final int REQUEST_CODE = 1234;
     private Cursor cursor;
     private ListView listView;
     private SQLiteDatabase db;
-    private TaskCursorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case  R.id.daily_assignments:
                 i = new Intent(MainActivity.this,DailyAssignments.class);
                 break;
-
+            default:
+                Toast.makeText(this, "Activity was not found!", Toast.LENGTH_SHORT).show();
+                break;
         }
         startActivity(i);
     }
@@ -102,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        cursor=db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0 AND " + Constants.TASKS.DATETIME + ">=? AND " + Constants.TASKS.DATETIME + "<?",new String[]{getCurrentDate() ,getDate()},null ,null,null,null);
+        cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0 AND " + Constants.TASKS.DATETIME + ">=? AND " + Constants.TASKS.DATETIME + "<?",new String[]{getCurrentDate() ,getDate()},null ,null,null,null);
         cursor.moveToFirst();
-        adapter = new TaskCursorAdapter(this, cursor);
+        TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
 
     }
@@ -112,13 +111,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String getDate (){
         Calendar c = Calendar.getInstance();
         c.add(Calendar.HOUR, 3);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return sdf.format(c.getTime());
     }
 
     private String getCurrentDate() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return sdf.format(c.getTime());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cursor.close();
+        db.close();
     }
 }
