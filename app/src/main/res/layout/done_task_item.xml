@@ -37,5 +37,7 @@
         android:id="@+id/deleteTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/delete_task"/>
+        android:text="@string/delete_task"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:drawableStart="@drawable/ic_action_delete"/>
 </LinearLayout>

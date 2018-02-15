@@ -3,62 +3,74 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:paddingStart="40dp"
+    android:paddingEnd="40dp">
     <EditText
         android:id="@+id/fullNameEditTextNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/full_name"
-        android:inputType="text" />
+        android:inputType="text"
+        android:drawableStart="@drawable/ic_person_details"/>
 
     <EditText
         android:id="@+id/phoneNumberEditTextNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/phone_number"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:drawableStart="@drawable/ic_phone"/>
 
     <EditText
         android:id="@+id/cityAddressNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/city"
-        android:inputType="text" />
+        android:inputType="text"
+        android:drawableStart="@drawable/ic_address"/>
 
     <EditText
         android:id="@+id/streetAddressNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/street"
-        android:inputType="text" />
+        android:inputType="text"
+        android:drawableStart="@drawable/ic_address"/>
 
     <EditText
         android:id="@+id/apartmentNumberNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/apartmentNumber"
-        android:inputType="number" />
+        android:inputType="number"
+        android:drawableStart="@drawable/ic_address"/>
 
     <EditText
         android:id="@+id/dateToDeliverNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/date_to_deliver"
         android:inputType="date"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:drawableStart="@drawable/ic_date"/>
 
     <EditText
         android:id="@+id/timeToDeliverNT"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/time_to_deliver"
         android:inputType="time"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:drawableStart="@drawable/ic_time"/>
     <Button
         android:id="@+id/sum_new_task_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submitBtn"/>
+        android:text="@string/submitBtn"
+        style="@style/Widget.AppCompat.Button.Colored"/>
 </LinearLayout>
