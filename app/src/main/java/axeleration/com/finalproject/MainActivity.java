@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Cursor cursor;
     private ListView listView;
     private SQLiteDatabase db;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         listView = findViewById(R.id.listViewMain);
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+
+       intent = new Intent(MainActivity.this, NotificationService.class);
+       startService(intent);
+
 
     }
 
@@ -129,8 +135,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        stopService(intent);
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopService(intent);
         cursor.close();
         db.close();
     }

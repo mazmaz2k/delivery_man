@@ -78,7 +78,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="axeleration.com.finalproject.MainActivity" />
         </activity>
-
+        <service android:name=".NotificationService"
+            android:exported="false"/>
     </application>
 
 </manifest>
