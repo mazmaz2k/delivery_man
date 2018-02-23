@@ -117,7 +117,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 null);
         cursor.moveToFirst();
         TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
+        adapter.notifyDataSetChanged();
+
         listView.setAdapter(adapter);
+        listView.invalidateViews();
 
     }
 

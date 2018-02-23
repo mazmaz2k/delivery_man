@@ -1,5 +1,6 @@
 package axeleration.com.finalproject;
 
+import android.Manifest;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,13 +9,24 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by mazma on 18/02/2018.
@@ -27,7 +39,9 @@ public class NotificationService extends IntentService{
      * @param name' Used to name the worker thread, important only for debugging.
      */
     public static final String NOTIFICATION_CHANNEL_ID = "4655";
-
+    private Cursor cursor;
+    private SQLiteDatabase db;
+    boolean showOnlyOnce=true;
     boolean flag;
     NotificationCompat.Builder notification;
     public NotificationService(){
@@ -36,13 +50,38 @@ public class NotificationService extends IntentService{
     }
 
 
+
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        boolean flag = true;
+        flag = true;
+//        showOnlyOnce=true;
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+
+
+      //  cursor.moveToFirst();
+
+
         while(flag) {
             try {
                 Thread.sleep(10000);
-                setNotificationCall();
+                cursor=db.query(Constants.TASKS.TABLE_NAME,
+                        null,
+                        Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
+                        new String[] {"0", getCurrentDate(), getDate()},
+                        null,
+                        null,
+                        null,
+                        null);
+                if(cursor.getCount()!=0 && showOnlyOnce)
+                {
+                    cursor.moveToFirst();
+                    final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
+                    final String clientName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.CLIENT_NAME));
+                    final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
+                    final String address =cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));
+                    setNotificationCall(receiverName,clientName,phoneNumber,address);
+                    showOnlyOnce=false;
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -53,19 +92,21 @@ public class NotificationService extends IntentService{
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         flag=false;
+
     }
 
-    public void setNotificationCall(){
+    public void setNotificationCall(String recvName,String clientName,String phoneNum,String address){
         int NOTIFICATION_ID = 234;
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        final String CHANNEL_ID = "my_channel_01";
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
 
-            String CHANNEL_ID = "my_channel_01";
             CharSequence name = "my_channel";
             String Description = "This is my channel";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -78,14 +119,33 @@ public class NotificationService extends IntentService{
             mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
         }
-        Intent intent = new Intent(this,NewTask.class);
+//        Intent intent = new Intent(this,NewTask.class);
+        Intent nevIntent = new Intent(Intent.ACTION_VIEW);
+        nevIntent.setData(Uri.parse("google.navigation:q=" + address));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"Permission for sms not allowed",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //todo : send sms when press nevigate
+//        SmsManager.getDefault().sendTextMessage(phoneNum,"","Hello " + recvName + ",\nIm the delivery boy.\nI'm on my way\nPlease be available on the next 2 hours.\nThank you.",null,null);
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + phoneNum));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"Permission for calls not allowed",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_01")
+        PendingIntent nev_pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), nevIntent, 0);
+        Intent intent1 = new Intent(this,MainActivity.class);
+        PendingIntent call_pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), callIntent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("new")
-                .setContentText("new")
-                .addAction(R.drawable.ic_call, "Call",pIntent);
+                .setContentTitle("Package to deliver:")
+                .setContentText("GO to "+ recvName+"\n"+ "from "+ clientName)
+                .addAction(R.drawable.ic_stat_ic_call, "Call",call_pIntent)
+                .addAction(R.drawable.ic_navigate,"nevigate",nev_pIntent);
 
         Intent resultIntent = new Intent(this, NotificationService.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -97,5 +157,19 @@ public class NotificationService extends IntentService{
         notificationManager.notify(NOTIFICATION_ID, builder.build());
 
     }
+    private String getDate (){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.HOUR, 3);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(c.getTime());
+    }
+
+    private String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(c.getTime());
+    }
+
+
 
 }
