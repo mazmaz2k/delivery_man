@@ -61,8 +61,7 @@ public class NotificationService extends IntentService{
                         new String[] {"0", getCurrentDate(), getDate()},
                         null,
                         null,
-                        null,
-                        null);
+                        Constants.TASKS.DATETIME + " ASC");
                 if(cursor.getCount()!=0 && showOnlyOnce)
                 {
                     cursor.moveToFirst();
@@ -108,7 +107,6 @@ public class NotificationService extends IntentService{
             mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
         }
-        Intent intent = new Intent(this,NewTask.class);
         Intent nevIntent = new Intent(Intent.ACTION_VIEW);
         nevIntent.setData(Uri.parse("google.navigation:q=" + address));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
@@ -132,8 +130,9 @@ public class NotificationService extends IntentService{
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Package to deliver:")
                 .setContentText("GO to "+ recvName+"\n"+ "from "+ clientName)
-                .addAction(R.drawable.ic_stat_ic_call, "Call",call_pIntent)
-                .addAction(R.drawable.ic_navigate,"nevigate",nev_pIntent);
+                .addAction(R.drawable.ic_call, "Call",call_pIntent)
+                .addAction(R.mipmap.ic_launcher, "Kick", call_pIntent)
+                .addAction(R.drawable.ic_navigate,"Navigate",nev_pIntent);
 
         Intent resultIntent = new Intent(this, NotificationService.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

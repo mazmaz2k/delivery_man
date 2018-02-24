@@ -113,8 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new String[] {"0", getCurrentDate(), getDate()},
                 null,
                 null,
-                null,
-                null);
+                Constants.TASKS.DATETIME + " ASC");
         cursor.moveToFirst();
         TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);

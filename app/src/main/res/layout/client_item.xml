@@ -27,28 +27,30 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/addTaskBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/add_task"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:drawableStart="@drawable/ic_new_task"/>
         <Button
             android:id="@+id/showTskBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/show_tasks"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:drawableStart="@drawable/ic_all_tasks"/>
         <Button
             android:id="@+id/call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/call"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:drawableStart="@drawable/ic_call"/>
