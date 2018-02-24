@@ -28,43 +28,33 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * Created by mazma on 18/02/2018.
- */
 
 public class NotificationService extends IntentService{
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name' Used to name the worker thread, important only for debugging.
-     */
-    public static final String NOTIFICATION_CHANNEL_ID = "4655";
+
     private Cursor cursor;
     private SQLiteDatabase db;
     boolean showOnlyOnce=true;
     boolean flag;
-    NotificationCompat.Builder notification;
+
     public NotificationService(){
         super("NotificationService");
-
+        flag = true;
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+        Log.d("temp", "creating service notification");
     }
 
 
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        flag = true;
-//        showOnlyOnce=true;
-        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-
-
-      //  cursor.moveToFirst();
-
 
         while(flag) {
             try {
                 Thread.sleep(10000);
                 Log.d("temp","Service Runs");
+                if(!db.isOpen()) {
+                    return;
+                }
                 cursor=db.query(Constants.TASKS.TABLE_NAME,
                         null,
                         Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
@@ -93,9 +83,7 @@ public class NotificationService extends IntentService{
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        flag=false;
-
+        flag = false;
     }
 
     public void setNotificationCall(String recvName,String clientName,String phoneNum,String address){
@@ -169,6 +157,8 @@ public class NotificationService extends IntentService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return sdf.format(c.getTime());
     }
+
+
 
 
 
