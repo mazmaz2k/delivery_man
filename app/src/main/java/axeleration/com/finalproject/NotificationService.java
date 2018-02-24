@@ -64,6 +64,7 @@ public class NotificationService extends IntentService{
         while(flag) {
             try {
                 Thread.sleep(10000);
+                Log.d("temp","Service Runs");
                 cursor=db.query(Constants.TASKS.TABLE_NAME,
                         null,
                         Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
@@ -105,7 +106,7 @@ public class NotificationService extends IntentService{
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
+            Log.d("temp", "inside");
 
             CharSequence name = "my_channel";
             String Description = "This is my channel";
@@ -119,7 +120,7 @@ public class NotificationService extends IntentService{
             mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
         }
-//        Intent intent = new Intent(this,NewTask.class);
+        Intent intent = new Intent(this,NewTask.class);
         Intent nevIntent = new Intent(Intent.ACTION_VIEW);
         nevIntent.setData(Uri.parse("google.navigation:q=" + address));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
@@ -137,7 +138,6 @@ public class NotificationService extends IntentService{
         }
 
         PendingIntent nev_pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), nevIntent, 0);
-        Intent intent1 = new Intent(this,MainActivity.class);
         PendingIntent call_pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), callIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)

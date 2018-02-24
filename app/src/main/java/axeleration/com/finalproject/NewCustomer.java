@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -230,6 +231,12 @@ public class NewCustomer extends AppCompatActivity {
             values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         }
         return db.insert(dbName, null, values);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 
 }

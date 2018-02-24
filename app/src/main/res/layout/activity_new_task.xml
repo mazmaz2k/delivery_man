@@ -8,6 +8,7 @@
     android:layout_gravity="center"
     android:paddingStart="40dp"
     android:paddingEnd="40dp">
+
     <EditText
         android:id="@+id/fullNameEditTextNT"
         android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ListView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,24 +14,11 @@ import java.util.Locale;
 public class DailyAssignments extends AppCompatActivity {
 
     private Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_assignments);
-
-        ListView listView = findViewById(R.id.listViewTaskes);
-        SQLiteDatabase db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        cursor = db.query(Constants.TASKS.TABLE_NAME,
-                null,
-                Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATE + "=? AND "+ Constants.TASKS.DATETIME + ">=?",
-                new String[] {"0", getTodayDate(),  getDate()},
-                null,
-                null,
-                Constants.TASKS.DATETIME + " ASC");
-
-        TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
-        listView.setAdapter(adapter);
-
     }
 
     private String getTodayDate (){
@@ -44,8 +32,31 @@ public class DailyAssignments extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        ListView listView = findViewById(R.id.listViewTaskes);
+        SQLiteDatabase db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+        cursor = db.query(Constants.TASKS.TABLE_NAME,
+                null,
+                Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATE + "=? AND "+ Constants.TASKS.DATETIME + ">=?",
+                new String[] {"0", getTodayDate(),  getDate()},
+                null,
+                null,
+                Constants.TASKS.DATETIME + " ASC");
+
+        TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
+        listView.setAdapter(adapter);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         cursor.close();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 }

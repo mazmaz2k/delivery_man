@@ -117,10 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 null);
         cursor.moveToFirst();
         TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
-        adapter.notifyDataSetChanged();
-
         listView.setAdapter(adapter);
-        listView.invalidateViews();
 
     }
 
@@ -138,15 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        stopService(intent);
-
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("temp","main Ondestory");
         stopService(intent);
         cursor.close();
         db.close();

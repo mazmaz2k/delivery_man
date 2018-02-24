@@ -23,7 +23,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 
     TaskCursorAdapter(Context context, Cursor c) {
 
-        super(context, c);
+        super(context, c, false);
         inflater = LayoutInflater.from(context);
     }
 

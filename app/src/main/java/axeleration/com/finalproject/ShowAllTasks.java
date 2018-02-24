@@ -60,4 +60,10 @@ public class ShowAllTasks extends AppCompatActivity {
         adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
 }

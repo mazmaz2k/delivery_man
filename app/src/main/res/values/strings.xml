@@ -19,9 +19,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="show_tasks">Show Tasks</string>
+    <string name="show_tasks">All Tasks</string>
     <string name="call">call</string>
-    <string name="add_task">Add Task</string>
+    <string name="add_task">New Task</string>
     <string name="title_activity_show_all_tasks">All Tasks</string>
     <string name="navigate_to_location">Nav</string>
     <string name="receiver_name">Receiver Name:</string>

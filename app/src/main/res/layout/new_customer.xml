@@ -12,42 +12,48 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_margin="10dp">
 
         <EditText
             android:id="@+id/fullNameEditText"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/company_name"
-            android:inputType="text" />
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_person_details"/>
 
         <EditText
             android:id="@+id/phoneNumberEditText"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/phone_number"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:drawableStart="@drawable/ic_phone"/>
 
         <EditText
             android:id="@+id/cityAddress"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/city"
-            android:inputType="text" />
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_address"/>
 
         <EditText
             android:id="@+id/streetAddress"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/street"
-            android:inputType="text" />
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_address"/>
 
         <EditText
             android:id="@+id/apartmentNumber"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/apartmentNumber"
-            android:inputType="number" />
+            android:inputType="number"
+            android:drawableStart="@drawable/ic_address"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -68,9 +74,10 @@
 
         <Button
             android:id="@+id/submitBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/submitBtn"/>
+            android:text="@string/submitBtn"
+            style="@style/Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>
 
@@ -80,60 +87,68 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_margin="10dp">
 
         <EditText
             android:id="@+id/fullNameEditTextReceiver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/full_name"
-            android:inputType="text" />
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_person_details"/>
 
         <EditText
             android:id="@+id/phoneNumberEditTextReceiver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/phone_number"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:drawableStart="@drawable/ic_phone"/>
 
         <EditText
             android:id="@+id/cityAddressReceiver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/city"
-            android:inputType="text" />
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_address"/>
 
         <EditText
             android:id="@+id/streetAddressReceiver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/street"
-            android:inputType="text" />
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_address"/>
 
         <EditText
             android:id="@+id/apartmentNumberReceiver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/apartmentNumber"
-            android:inputType="number" />
+            android:inputType="number"
+            android:drawableStart="@drawable/ic_address"/>
 
         <EditText
             android:id="@+id/dateToDeliver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/date_to_deliver"
             android:inputType="datetime"
             android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false"
+            android:drawableStart="@drawable/ic_date"/>
 
         <EditText
             android:id="@+id/timeToDeliver"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/time_to_deliver"
             android:inputType="time"
             android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false"
+            android:drawableStart="@drawable/ic_time"/>
 
     </LinearLayout>
 
