@@ -26,10 +26,9 @@
     <string name="navigate_to_location">Nav</string>
     <string name="receiver_name">Receiver Name:</string>
     <string name="standard">standard</string>
-    <string name="sort_by_name">Sort by name</string>
-    <string name="sort_by_date">Sort by date</string>
-    <string name="standard_2">Default</string>
-    <string name="sort_by_address">sort by address</string>
+    <string name="sort_by_name">Sort By Name</string>
+    <string name="sort_by_date">Sort By Date</string>
+    <string name="sort_by_location">Sort By Location</string>
     <string name="permission_granted">All Permission Granted</string>
     <string name="permission_not_granted">Permission not granted! The Application may not work properly!</string>
     <string name="ok">OK</string>

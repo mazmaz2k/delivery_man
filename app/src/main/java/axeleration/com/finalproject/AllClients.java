@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -18,25 +19,6 @@ public class AllClients extends AppCompatActivity {
     private SQLiteDatabase db;
     private ClientCursorAdapter adapter;
     private Cursor cursor;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    sortChange(0);
-                    return true;
-                case R.id.navigation_dashboard:
-                    sortChange(1);
-                    return true;
-                case R.id.navigation_notifications:
-                    sortChange(2);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +31,25 @@ public class AllClients extends AppCompatActivity {
         cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
         adapter = new ClientCursorAdapter(this, cursor);
         list.setAdapter(adapter);
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    public void sortChange(int idx){
-        if(idx==0){
-            cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);
-        }else if(idx==1){
-            cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, Constants.CLIENTS.FULL_NAME);
-        }else if(idx==2){
-            cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, Constants.CLIENTS.ADDRESS);
-        }
-        adapter = new ClientCursorAdapter(this, cursor);
-        list.setAdapter(adapter);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.client_navigation, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
+        switch(item.getItemId()) {
+            case R.id.sort_by_name:
+                cursor = db.query(Constants.CLIENTS.TABLE_NAME,null,null,null,null,null,Constants.TASKS.FULL_NAME + " ASC");
+                break;
+            default:
+                onBackPressed();
+        }
+        adapter = new ClientCursorAdapter(this,cursor);
+        list.setAdapter(adapter);
         return true;
     }
 }
