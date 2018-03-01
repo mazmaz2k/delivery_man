@@ -131,7 +131,7 @@ public class NotificationService extends IntentService{
                 .setContentTitle("Package to deliver:")
                 .setContentText("GO to "+ recvName+"\n"+ "from "+ clientName)
                 .addAction(R.drawable.ic_call, "Call",call_pIntent)
-                .addAction(R.mipmap.ic_launcher, "Kick", call_pIntent)
+//                .addAction(R.mipmap.ic_launcher, "Kick", call_pIntent)
                 .addAction(R.drawable.ic_navigate,"Navigate",nev_pIntent);
 
         Intent resultIntent = new Intent(this, NotificationService.class);

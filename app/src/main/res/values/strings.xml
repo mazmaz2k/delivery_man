@@ -45,4 +45,9 @@
     <string name="register_new_client">Register New Client</string>
     <string name="finish_tasks_label">Finish Tasks</string>
     <string name="daily_tasks_label">Daily Tasks</string>
+    <string name="finish_last_month_tasks">Finish last Month Tasks:</string>
+    <string name="finish_last_week_tasks">Finish last week Tasks:</string>
+    <string name="urgent_tasks">Urgent Tasks:</string>
+    <string name="finish_from_all">Finish from All:</string>
+    <string name="finish_from_daily">Finish from daily:</string>
 </resources>

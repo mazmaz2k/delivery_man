@@ -71,11 +71,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         ImageButton allClients = findViewById(R.id.allClients);
         ImageButton allTask = findViewById(R.id.allTasksBtn);
         ImageButton finishTasks = findViewById(R.id.finishedTaskBtn);
+        ImageButton statisticBtn = findViewById(R.id.statistic);
         finishTasks.setOnClickListener(this);
         allTask.setOnClickListener(this);
         allClients.setOnClickListener(this);
         addTask.setOnClickListener(this);
         dailyAssignments.setOnClickListener(this);
+        statisticBtn.setOnClickListener(this);
 
         listView = findViewById(R.id.listViewMain);
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
@@ -127,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.daily_assignments:
                 i = new Intent(MainActivity.this, DailyAssignments.class);
+                break;
+            case R.id.statistic :
+                i = new Intent(MainActivity.this, Statistic.class);
                 break;
             default:
                 Toast.makeText(this, "Activity was not found!", Toast.LENGTH_SHORT).show();
