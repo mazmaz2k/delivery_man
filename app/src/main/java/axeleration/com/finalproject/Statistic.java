@@ -4,10 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,8 +12,8 @@ import java.util.Locale;
 
 public class Statistic extends AppCompatActivity {
 
-    private SQLiteDatabase db;
     private  Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +24,8 @@ public class Statistic extends AppCompatActivity {
         TextView urgentTasks = findViewById(R.id.urgentTasks);
         TextView finishThisWeekTasks = findViewById(R.id.finishThisWeekTasks);
         TextView finishThisMonthsTasks = findViewById(R.id.finishThisMonthsTasks);
-        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        Cursor cursor = db.query(Constants.TASKS.TABLE_NAME,
+        SQLiteDatabase db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+        cursor = db.query(Constants.TASKS.TABLE_NAME,
                 null,
                 Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATE + "=? AND "+ Constants.TASKS.DATETIME + "<=?",
                 new String[] {"0", getTodayDate(),  getDate(0)},
@@ -91,9 +88,6 @@ public class Statistic extends AppCompatActivity {
         urgentTasks.setText(" "+urgentTasksCount+" / "+numOfDaily);
         finishThisWeekTasks.setText(" "+ count_finishThisWeekTasks);
         finishThisMonthsTasks.setText(" "+ count_finishThisMonthsTasks);
-
-        cursor.close();
-
     }
 
     private String getCurrentDate() {
@@ -119,5 +113,11 @@ public class Statistic extends AppCompatActivity {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return sdf.format(c.getTime());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cursor.close();
     }
 }

@@ -15,33 +15,38 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/* Custom cursor adapter class */
 public class ClientCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
 
+    /* Constructor */
     ClientCursorAdapter(Context context, Cursor c) {
-
         super(context, c, false);
         inflater = LayoutInflater.from(context);
     }
-
+    /* New view of the row with the data of list view */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return inflater.inflate(R.layout.client_item, parent, false);
     }
 
+    /* Manipulation for each row in the list view */
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
-        final TextView text = view.findViewById(R.id.name);
-        final String clientName = cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.FULL_NAME));
-        TextView phone = view.findViewById(R.id.phone);
-        Button newTask = view.findViewById(R.id.addTaskBtn);
-        Button showAllTasks = view.findViewById(R.id.showTskBtn);
-        final int id = cursor.getInt(cursor.getColumnIndex(Constants.CLIENTS._ID));
-        final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER));
+        final TextView text = view.findViewById(R.id.name); // Text view of the name.
+        final TextView phone = view.findViewById(R.id.phone);   // Text view of the phone number.
+        final Button newTask = view.findViewById(R.id.addTaskBtn);  // Button to add new task for the specific client.
+        final Button showAllTasks = view.findViewById(R.id.showTskBtn); // Button to show all tasks for the specific client.
+        final Button callBtm = view.findViewById(R.id.call); // Button to make a call.
+
+
+        final String clientName = cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.FULL_NAME)); // Client name string.
+        final int id = cursor.getInt(cursor.getColumnIndex(Constants.CLIENTS._ID));     // Client id number.
+        final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)); // Client phone String.
         showAllTasks.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   // On click listener to show all tasks per client.
                 Intent i = new Intent(context, ShowAllTasks.class);
                 i.putExtra("client_id", id);
                 context.startActivity(i);
@@ -49,37 +54,28 @@ public class ClientCursorAdapter extends CursorAdapter {
         });
         newTask.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   // On click listener to create new task per client.
                 Intent i = new Intent(context, NewTask.class);
                 i.putExtra("clientName", cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.FULL_NAME)));
                 i.putExtra("client_id", id);
                 context.startActivity(i);
             }
         });
-        Button callBtm = view.findViewById(R.id.call);
         callBtm.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   // On click listener to make a call.
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" + phoneNumber));
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    //ActivityCompat.requestPermissions(context,new String[]{Manifest.permission.CALL_PHONE},MainActivity.REQUEST_CODE);
-                    Toast.makeText(context,"Permmition not allowed",Toast.LENGTH_SHORT).show();
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) { // if call permission not granted.
+                    Toast.makeText(context,"Permission not allowed",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                context.startActivity(intent);
+                context.startActivity(intent);  // permission granted, make a call.
             }
         });
-        text.setText(clientName);
-        phone.setText(cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)));
+        text.setText(clientName);   // Set client name to text view.
+        phone.setText(cursor.getString(cursor.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER))); // Set phone number to text view.
 
     }
 }

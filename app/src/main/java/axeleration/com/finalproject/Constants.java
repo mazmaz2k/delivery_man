@@ -2,6 +2,7 @@ package axeleration.com.finalproject;
 
 import android.provider.BaseColumns;
 
+/* This class is for reflecting out constants for out DB */
 final class Constants {
 
     static final int DB_VERSION = 1;
@@ -29,7 +30,6 @@ final class Constants {
 
     static final String REMOVE_SQL_TABLE_CLIENTS = "DROP TABLE IF EXISTS " + Constants.CLIENTS.TABLE_NAME;
     static final String REMOVE_SQL_TABLE_TASKS = "DROP TABLE IF EXISTS " + Constants.TASKS.TABLE_NAME;
-
 
     private Constants() {
         throw new AssertionError("Can't create constants class");
