@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/* Singleton for DB Open Helper */
 public class DBHelperSingleton extends SQLiteOpenHelper {
 
     private static DBHelperSingleton helper;
@@ -12,9 +13,10 @@ public class DBHelperSingleton extends SQLiteOpenHelper {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
     }
 
+    /* Return the instance of DBHelper */
     static DBHelperSingleton getInstanceDBHelper(Context context) {
-        if(helper == null) {
-            helper = new DBHelperSingleton(context);
+        if(helper == null) {    // if not initialize yet.
+            helper = new DBHelperSingleton(context);    // initial
         }
         return helper;
     }

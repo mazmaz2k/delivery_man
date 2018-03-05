@@ -16,16 +16,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import static axeleration.com.finalproject.StaticFunctions.*;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
@@ -168,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         cursor = db.query(Constants.TASKS.TABLE_NAME,
                 null,
                 Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
-                new String[] {"0", getCurrentDate(), getDate()},
+                new String[] {"0", getCurrentDate("yyyy-MM-dd HH:mm:ss"), getFutureDate("yyyy-MM-dd HH:mm:ss", 3)},
                 null,
                 null,
                 Constants.TASKS.DATETIME + " ASC");
@@ -178,18 +174,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
-    private String getDate (){
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.HOUR, 3);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return sdf.format(c.getTime());
-    }
 
-    private String getCurrentDate() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return sdf.format(c.getTime());
-    }
+
 
     @Override
     protected void onDestroy() {
