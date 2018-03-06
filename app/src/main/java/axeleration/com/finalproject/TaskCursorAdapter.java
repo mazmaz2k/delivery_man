@@ -49,6 +49,7 @@ public class TaskCursorAdapter extends CursorAdapter {
         final String receiverPhoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));   // Receiver phone number string.
         final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME)); // Receiver name string.
         final String receiverAddress = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));    // Receiver address string.
+
         doneTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {  // On click listener to finish the task and goes to the signature activity.
@@ -57,6 +58,7 @@ public class TaskCursorAdapter extends CursorAdapter {
                 i.putExtra("client_id", id);
                 i.putExtra("receiver_id", receiver_id);
                 i.putExtra("phone_number", receiverPhoneNumber);
+
                 context.startActivity(i);
             }
         });

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+/*This activity will show all Tasks and able to sort then*/
 public class ShowAllTasks extends AppCompatActivity {
 
     private Cursor cursor;
@@ -29,10 +30,8 @@ public class ShowAllTasks extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all_tasks);
-
-        client_id = getIntent().getIntExtra("client_id",-1);
-
-        listView = findViewById(R.id.listViewTaskes);
+        client_id = getIntent().getIntExtra("client_id",-1);    // receive client id from another Intent
+        listView = findViewById(R.id.listViewTaskes);   //find list view
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
     }
 
@@ -49,24 +48,26 @@ public class ShowAllTasks extends AppCompatActivity {
         if(client_id == -1){
             cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,null);
         }else {
-            cursor = db.query(Constants.TASKS.TABLE_NAME, null, Constants.TASKS.CLIENT_ID+"=?" +" AND "+Constants.TASKS.IS_SIGN+"=0", new String[] {String.valueOf(client_id)}, null, null, null);
+            cursor = db.query(Constants.TASKS.TABLE_NAME, null, Constants.TASKS.CLIENT_ID+"=?" +" AND "+Constants.TASKS.IS_SIGN+"=?", new String[] {String.valueOf(client_id),"0"}, null, null, null);
         }
         adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
     }
 
+
+    /*sort options*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.sort_by_date:
-                    cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN + "=0",null,null,null,Constants.TASKS.DATETIME + " ASC");
+                    cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN + "=0",null,null,null,Constants.TASKS.DATETIME + " ASC"); //sort by date query
                     break;
                 case R.id.sort_by_name:
-                    cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,Constants.TASKS.FULL_NAME + " ASC");
+                    cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,Constants.TASKS.FULL_NAME + " ASC"); //sort by name query
                     break;
                 case R.id.sort_by_location:
                     updateAllDBLocation();
-                    cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN + "=0",null,null,null,Constants.TASKS.LOCATION + " ASC");
+                    cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN + "=0",null,null,null,Constants.TASKS.LOCATION + " ASC"); //sort by Location query
                     break;
                 default:
                     onBackPressed();
@@ -75,7 +76,7 @@ public class ShowAllTasks extends AppCompatActivity {
         listView.setAdapter(adapter);
         return true;
     }
-
+    /*update all location in the Tasks Table*/
     private void updateAllDBLocation() {
         cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN + "=0",null,null,null,null);
         cursor.moveToFirst();
@@ -92,7 +93,8 @@ public class ShowAllTasks extends AppCompatActivity {
         }
     }
 
-    private Location getLocation(String address) {  // This function returns a new location object from address string.
+    /* This function returns a new location object from address string.*/
+    private Location getLocation(String address) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         Address addressObj = null;
         try {
@@ -115,7 +117,8 @@ public class ShowAllTasks extends AppCompatActivity {
         return location;
     }
 
-    private ContentValues getContentValues(Location location) {    // This function will return a new contentValues object with the new location of the address from current location.
+    /* This function will return a new contentValues object with the new location of the address from current location. */
+    private ContentValues getContentValues(Location location) {
         if(location == null)
             return null;
         ContentValues values = new ContentValues();

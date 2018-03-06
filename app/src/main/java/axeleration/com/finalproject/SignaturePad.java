@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+/*This Activity create JPEG file of the signature and saves it in the device*/
 public class SignaturePad extends AppCompatActivity {
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -51,6 +51,7 @@ public class SignaturePad extends AppCompatActivity {
         verifyStoragePermissions(this);
         setContentView(R.layout.activity_signature_pad);
 
+        //receive data from another Intent ,receiver name and phone client Id.
         receiver_name = getIntent().getStringExtra("receiver_name");
         int client_id = getIntent().getIntExtra("client_id", -1);
         receiver_phone_number = getIntent().getStringExtra("phone_number");
@@ -58,12 +59,18 @@ public class SignaturePad extends AppCompatActivity {
 
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
 
-        c = db.query(Constants.CLIENTS.TABLE_NAME, null,Constants.CLIENTS._ID + "=?",  new String[]{String.valueOf(client_id)}, null, null,null );
+        c = db.query(Constants.CLIENTS.TABLE_NAME,      //query to find specific client by given ID
+                null
+                ,Constants.CLIENTS._ID + "=?"
+                ,  new String[]{String.valueOf(client_id)}
+                , null
+                , null
+                ,null );
         c.moveToFirst();
         client_name = c.getString(c.getColumnIndex(Constants.CLIENTS.FULL_NAME));
         date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
 
-        mSignaturePad = findViewById(R.id.signature_pad);
+        mSignaturePad = findViewById(R.id.signature_pad); //find pad view
         mSignaturePad.setOnSignedListener(new com.github.gcacace.signaturepad.views.SignaturePad.OnSignedListener() {
             @Override
             public void onStartSigning() {
@@ -71,7 +78,7 @@ public class SignaturePad extends AppCompatActivity {
             }
 
             @Override
-            public void onSigned() {
+            public void onSigned() {    //check
                 mSaveButton.setEnabled(true);
                 mClearButton.setEnabled(true);
             }
@@ -83,19 +90,17 @@ public class SignaturePad extends AppCompatActivity {
             }
         });
 
-        mClearButton = findViewById(R.id.clear_button);
-        mSaveButton = findViewById(R.id.save_button);
-
-        mClearButton.setOnClickListener(new View.OnClickListener() {
+        mClearButton = findViewById(R.id.clear_button); // find button to clear pad
+        mSaveButton = findViewById(R.id.save_button);// find button to save pad
+        mClearButton.setOnClickListener(new View.OnClickListener() {       //Listener to clear the pad when press
             @Override
             public void onClick(View view) {
                 mSignaturePad.clear();
             }
         });
-
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {    //Listener to save the pad when press
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
                 if (addJpgSignatureToGallery(signatureBitmap)) {
                     Toast.makeText(SignaturePad.this, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
@@ -103,22 +108,22 @@ public class SignaturePad extends AppCompatActivity {
                     Toast.makeText(SignaturePad.this, "Unable to store the signature", Toast.LENGTH_SHORT).show();
                 }
                 putToDoneTask();
-                sendSMS(c.getString(c.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)), receiver_name + " just receive the package you sent!");
-                sendSMS(receiver_phone_number, "Dear customer, thank you for receiving the package!");
+                sendSMS(c.getString(c.getColumnIndex(Constants.CLIENTS.PHONE_NUMBER)), receiver_name + " just receive the package you sent!");  //send SMS so client
+                sendSMS(receiver_phone_number, "Dear customer, thank you for receiving the package!");  //send SMS to receiver
                 finish();
             }
         });
     }
 
+    /*put values in Task table and update it */
     private void putToDoneTask() {
-        //db.delete(Constants.TASKS.TABLE_NAME, Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
         ContentValues cv = new ContentValues();
         cv.put(Constants.TASKS.IS_SIGN,1);
         db.update(Constants.TASKS.TABLE_NAME,cv,Constants.TASKS._ID + "=?", new String[]{String.valueOf(receiver_id)});
     }
-
+    /* send SMS to destination*/
     private void sendSMS(String number, String message) {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED || //check if there is permission to send SMS
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.SEND_SMS,
@@ -130,6 +135,7 @@ public class SignaturePad extends AppCompatActivity {
         SmsManager.getDefault().sendTextMessage(number, null, message, null, null );
     }
 
+    /* callback of permission request result*/
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -150,7 +156,7 @@ public class SignaturePad extends AppCompatActivity {
             }
         }
     }
-
+    /* create album directory in the gallery */
     public File getAlbumStorageDir(String albumName) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
@@ -160,7 +166,7 @@ public class SignaturePad extends AppCompatActivity {
         }
         return file;
     }
-
+    /* save pic from layout and create JPG*/
     public void saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
         Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
@@ -170,13 +176,13 @@ public class SignaturePad extends AppCompatActivity {
         newBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         stream.close();
     }
-
+    /* add and save Pic do storage device a*/
     public boolean addJpgSignatureToGallery(Bitmap signature) {
         boolean result = false;
         String today = date.format(Calendar.getInstance().getTime());
         try {
-            File photo = new File(getAlbumStorageDir(today), String.format("From: " + client_name + " To: " + receiver_name + ".jpg", System.currentTimeMillis()));
-            saveBitmapToJPG(signature, photo);
+            File photo = new File(getAlbumStorageDir(today), String.format("From: " + client_name + " To: " + receiver_name + ".jpg", System.currentTimeMillis())); //initialize pic name
+            saveBitmapToJPG(signature, photo); //save piv on device
             scanMediaFile(photo);
             result = true;
         } catch (IOException e) {
@@ -184,7 +190,7 @@ public class SignaturePad extends AppCompatActivity {
         }
         return result;
     }
-
+    /* check if pic is ok*/
     private void scanMediaFile(File photo) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri contentUri = Uri.fromFile(photo);
@@ -194,7 +200,7 @@ public class SignaturePad extends AppCompatActivity {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p/>
+     *
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity the activity from which permissions are checked
@@ -211,5 +217,11 @@ public class SignaturePad extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        c.close();
     }
 }

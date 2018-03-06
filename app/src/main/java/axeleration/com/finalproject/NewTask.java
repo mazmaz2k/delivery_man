@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 
+/* This activity to create new Task for specific client*/
 public class NewTask extends AppCompatActivity {
 
     private int selectedDate, selectedMonth, selectedYear;
@@ -27,8 +28,9 @@ public class NewTask extends AppCompatActivity {
         setContentView(R.layout.activity_new_task);
 
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        final int clientId = getIntent().getIntExtra("client_id",0);
-        final String clientName = getIntent().getStringExtra("clientName");
+        final int clientId = getIntent().getIntExtra("client_id",0); //receive client id from another Intent
+        final String clientName = getIntent().getStringExtra("clientName"); //receive client name from another Intent
+        //find all views from layout
         final EditText name = findViewById(R.id.fullNameEditTextNT);
         final EditText phone = findViewById(R.id.phoneNumberEditTextNT);
         final EditText city = findViewById(R.id.cityAddressNT);
@@ -39,7 +41,7 @@ public class NewTask extends AppCompatActivity {
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   //when press on time picker initialize data
                 final Dialog dialog = new Dialog(NewTask.this);
                 dialog.setContentView(R.layout.timepicker);
                 dialog.show();
@@ -73,7 +75,7 @@ public class NewTask extends AppCompatActivity {
 
         date.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {    //when enter date picker initialize data
                 // custom dialog
                 final Dialog dialog = new Dialog(NewTask.this);
                 dialog.setContentView(R.layout.datepicker);
@@ -119,7 +121,7 @@ public class NewTask extends AppCompatActivity {
         sumBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   //submit button listener
                 String nameReceiver = name.getText().toString();
                 String phoneReceiver = phone.getText().toString();
                 String cityReceiver = city.getText().toString();
@@ -129,14 +131,14 @@ public class NewTask extends AppCompatActivity {
                 String dateReceiver= date.getText().toString();
                 
                 String dateTime=createDateTime(dateReceiver,timeReceiver);
-                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){
+                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){ //check if all field's are filled
                     postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, dateTime);
                 }
             }
         });
 
     }
-
+    /* create time with custom format*/
     private String createDateTime(String dateReceiver, String timeReceiver) {
         String[] strings = dateReceiver.split("-");
         if(!(Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
@@ -151,10 +153,11 @@ public class NewTask extends AppCompatActivity {
         return strings[2]+"-"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
     }
 
-
+    //check if all field's are filled
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment, String time, String date) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
+    /* put values in Task table*/
     private void postToDB(String name, String phone, String city, String street, String apartment, long client_id, String clientName, String date, String dateTime) {
         ContentValues values = new ContentValues();
         values.put(Constants.TASKS.FULL_NAME, name);
@@ -166,7 +169,7 @@ public class NewTask extends AppCompatActivity {
         values.put(Constants.TASKS.IS_SIGN, 0);
         values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         long x = db.insert(Constants.TASKS.TABLE_NAME, null, values);
-        if(x != -1) {
+        if(x != -1) { //check if insert when without error
             Toast.makeText(NewTask.this, "New task added successfully", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(NewTask.this, "Some error occurred", Toast.LENGTH_SHORT).show();
@@ -176,7 +179,7 @@ public class NewTask extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
+        onBackPressed();    //enable bacj button
         return true;
     }
 }
