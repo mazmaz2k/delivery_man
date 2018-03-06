@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -23,27 +22,27 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import static axeleration.com.finalproject.StaticFunctions.*;
 
+/* Main activity class connects to google api location listener */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
+    public static Location myCurrentLocation;   // Current location of the user.
+    public static final int REQUEST_CODE = 1234;
     public final int QUERY_INTERVAL = 10000;  // Milliseconds
     public final int QUERY_FAST_INTERVAL = 10000;    // Milliseconds
-
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
-
-    public static Location myCurrentLocation;
-
-    public static final int REQUEST_CODE = 1234;
     private Cursor cursor;
     private ListView listView;
     private SQLiteDatabase db;
-    Intent intent;
+    private Intent intent;  // Intent for switching between activities in the application.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /* Request for permissions if the permissions is not granted. */
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -62,12 +61,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         myCurrentLocation = null;
 
+        /* Init each image button in the main activity */
         ImageButton dailyAssignments = findViewById(R.id.daily_assignments);
         ImageButton addTask = findViewById(R.id.addNewTaskBtn);
         ImageButton allClients = findViewById(R.id.allClients);
         ImageButton allTask = findViewById(R.id.allTasksBtn);
         ImageButton finishTasks = findViewById(R.id.finishedTaskBtn);
         ImageButton statisticBtn = findViewById(R.id.statistic);
+        listView = findViewById(R.id.listViewMain);
+
+        /* Init to each button on click listener */
         finishTasks.setOnClickListener(this);
         allTask.setOnClickListener(this);
         allClients.setOnClickListener(this);
@@ -75,17 +78,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         dailyAssignments.setOnClickListener(this);
         statisticBtn.setOnClickListener(this);
 
-        listView = findViewById(R.id.listViewMain);
-        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open the db.
 
+        /* Start the service */
         intent = new Intent(MainActivity.this, NotificationService.class);
         startService(intent);
 
-         /* Connect to google API services. */
+        /* Connect to google API services. */
         if (googleApiClient == null) {
             buildGoogleApi();
         }
-        createLocationRequest();
+        createLocationRequest();    // Location connection settings.
     }
 
     /* Location connection settings. */
@@ -93,8 +96,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         locationRequest = new LocationRequest();
         locationRequest.setInterval(QUERY_INTERVAL);                        // Update the location every 60 seconds.
         locationRequest.setFastestInterval(QUERY_FAST_INTERVAL);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        locationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);     // Update the location if we moved over 10 meters.
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);        // High priority.
     }
 
     /* Connect to google API. */
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .build();
     }
 
-
+    /* On click listener function */
     @Override
     public void onClick(View v) {
         Intent i = null;
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         grantResults[3] == PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+                    LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);   // Initialize the location update google api
                     Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_SHORT).show();
@@ -161,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onResume() {
         super.onResume();
-        cursor = db.query(Constants.TASKS.TABLE_NAME,
+        cursor = db.query(Constants.TASKS.TABLE_NAME,   // show the most important task in the activity for today in the range of 3 hours.
                 null,
                 Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
                 new String[] {"0", getCurrentDate("yyyy-MM-dd HH:mm:ss"), getFutureDate("yyyy-MM-dd HH:mm:ss", 3)},
@@ -171,29 +173,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         cursor.moveToFirst();
         TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
         listView.setAdapter(adapter);
-
     }
 
-
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("temp","main Ondestory");
-        stopService(intent);
-        cursor.close();
-        db.close();
-    }
-
+    /* After google API successfully connected.*/
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-        Log.d("temp","Listening for location change.");
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);   // start the location listener.
     }
 
     @Override
@@ -204,17 +193,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Toast.makeText(this, "Connection error!", Toast.LENGTH_SHORT).show();
     }
 
+    /* This functions call each 60sec and update the current location */
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("temp", "My Location is:\n Longitude: "  + location.getLongitude() + "\nLatiture: " + location.getLatitude());
         myCurrentLocation = location;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        googleApiClient.connect();
-        Log.d("temp","Google Api connected");
+        googleApiClient.connect();  // connect to google api.
     }
 
     @Override
@@ -222,9 +210,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onStop();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this); // stop the location listener.
         }
-        googleApiClient.disconnect();
-        Log.d("temp", "Google Api disconnected");
+        googleApiClient.disconnect();   // disconnect google api.
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(intent);    // stop the service.
+        cursor.close(); // close the cursor.
+        db.close(); // close the db.
     }
 }

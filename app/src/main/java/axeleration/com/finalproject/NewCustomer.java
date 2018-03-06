@@ -18,9 +18,10 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 
+/* This class for creating a new customer */
 public class NewCustomer extends AppCompatActivity {
 
-    private CheckBox checkBox;
+    private CheckBox newTaskRegister;   // if checked we can add a new task to this new customer.
     private int selectedDate, selectedMonth, selectedYear;
     private SQLiteDatabase db;
 
@@ -29,9 +30,9 @@ public class NewCustomer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_customer);
 
-        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open the db.
 
-        checkBox = findViewById(R.id.addNewTaskCheckBox);
+        newTaskRegister = findViewById(R.id.addNewTaskCheckBox);
         final EditText clientName = findViewById(R.id.fullNameEditText);
         final EditText clientPhone = findViewById(R.id.phoneNumberEditText);
         final EditText clientCity = findViewById(R.id.cityAddress);
@@ -46,27 +47,28 @@ public class NewCustomer extends AppCompatActivity {
         final EditText receiverTime = findViewById(R.id.timeToDeliver);
         final EditText receiverDate = findViewById(R.id.dateToDeliver);
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        newTaskRegister.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                LinearLayout view = findViewById(R.id.receiverLayout);
-                if(!isChecked)
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {    // set on check listener to the checkbox.
+                LinearLayout view = findViewById(R.id.receiverLayout);  // the view of new task.
+                if(!isChecked)          // if not checked the view is invisible.
                     view.setVisibility(View.INVISIBLE);
-                else {
+                else {  // the view is visible.
                     view.setVisibility(View.VISIBLE);
                     receiverTime.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v) {   // receiver time picker custom dialog creation.
                             final Dialog dialog = new Dialog(NewCustomer.this);
                             dialog.setContentView(R.layout.timepicker);
                             dialog.show();
                             final TimePicker timePicker = dialog.findViewById(R.id.timePicker1);
                             timePicker.setIs24HourView(true);
-                            Button buttonOk = dialog.findViewById(R.id.okBtn);
+                            Button buttonOk = dialog.findViewById(R.id.okBtn);  // Ok button
 
                             buttonOk.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onClick(View v) {
+                                public void onClick(View v) {   // on click listener
+                                    /* After click ok we parse the date that can be match to the format of db date field */
                                     int minutes = timePicker.getCurrentMinute();
                                     int hours = timePicker.getCurrentHour();
                                     String strTime;
@@ -82,16 +84,14 @@ public class NewCustomer extends AppCompatActivity {
                                         strTime = strHour + ":" + minutes;
                                     }
                                     receiverTime.setText(strTime);
-                                    dialog.dismiss();
+                                    dialog.dismiss();   // close the dialog.
                                 }
                             });
                         }
                     });
                     receiverDate.setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void onClick(View view) {
-                            // custom dialog
-
+                        public void onClick(View view) { // receiver date picker custom dialog creation.
                             final Dialog dialog = new Dialog(NewCustomer.this);
                             dialog.setContentView(R.layout.datepicker);
                             dialog.setTitle("");
@@ -107,19 +107,17 @@ public class NewCustomer extends AppCompatActivity {
 
                                 @Override
                                 public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-
+                                    String dateText = dayOfMonth + "-" + (month + 1) + "-" + year;
                                     if(selectedDate == dayOfMonth && selectedMonth == month && selectedYear == year) {
-
-                                        receiverDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                                        receiverDate.setText(dateText);
                                         dialog.dismiss();
                                     }else {
-
                                         if(selectedDate != dayOfMonth){
-                                            receiverDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                                            receiverDate.setText(dateText);
                                             dialog.dismiss();
                                         }else {
                                             if(selectedMonth != month){
-                                                receiverDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                                                receiverDate.setText(dateText);
                                                 dialog.dismiss();
                                             }
                                         }
@@ -129,8 +127,7 @@ public class NewCustomer extends AppCompatActivity {
                                     selectedYear = year;
                                 }
                             });
-
-                            dialog.show();
+                            dialog.show();  // show the dialog.
                         }
 
                     });
@@ -138,10 +135,11 @@ public class NewCustomer extends AppCompatActivity {
             }
         });
 
-        Button submitBtn = findViewById(R.id.submitBtn);
+        Button submitBtn = findViewById(R.id.submitBtn);    // submit button.
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   // button on click listener.
+                /* Getting all the data from all the view's fields */
                 String nameClient, phone, city, street, apartment, nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver,timeReceiver, dateReceiver;
                 long client_id;
                 nameClient = clientName.getText().toString();
@@ -150,7 +148,8 @@ public class NewCustomer extends AppCompatActivity {
                 street = clientStreet.getText().toString();
                 apartment = clientApartmentNumber.getText().toString();
 
-                if(checkBox.isChecked()) {
+                /* if the checkbox is checked so we gain the data also from the new task view's field */
+                if(newTaskRegister.isChecked()) {
                     nameReceiver = receiverName.getText().toString();
                     phoneReceiver = receiverPhone.getText().toString();
                     cityReceiver = receiverCity.getText().toString();
@@ -159,68 +158,73 @@ public class NewCustomer extends AppCompatActivity {
                     timeReceiver = receiverTime.getText().toString();
                     dateReceiver = receiverDate.getText().toString();
 
+                    /* Checking if all the fields of the new task are not empty */
                     if(!checkIfAnyEmpty(nameClient, phone, city, street, apartment) && !checkIfAnyEmpty(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, timeReceiver, dateReceiver)) {
-                        client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , "");
-                        if(client_id != -1) {
+                        client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , ""); // post to db.
+                        if(client_id != -1) {   // added new client successfully.
+                            /* trying to upload a new task for that specific client. */
                             if(postToDB(nameReceiver, phoneReceiver, cityReceiver, streetReceiver, apartmentReceiver, Constants.TASKS.TABLE_NAME, client_id, nameClient, dateReceiver, createDateTime(dateReceiver,timeReceiver)) == -1) {
                                 Toast.makeText(NewCustomer.this, "Cannot add the task, Some error occurred!", Toast.LENGTH_LONG).show();
-                            } else {
+                            } else { // user and task added successfully
                                 Toast.makeText(NewCustomer.this, "User and task added successfully", Toast.LENGTH_SHORT).show();
                             }
                             finish();
-                        } else {
+                        } else {    // client_id == -1 => we did not upload the data to the db.
                             Toast.makeText(NewCustomer.this, "User with this phone number already exists!", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else {    // some fields are empty.
                         Toast.makeText(NewCustomer.this, "Please make sure all the fields are filled.", Toast.LENGTH_SHORT).show();
                     }
 
-                } else {
+                } else {    // the checkbox is not checked.
+                    /* check if the user fields are not empty */
                     if(!checkIfAnyEmpty(nameClient, phone, city, street, apartment)) {
-                        client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , "");
-                        if(client_id != -1) {
+                        client_id = postToDB(nameClient, phone, city, street, apartment, Constants.CLIENTS.TABLE_NAME, -1, "", "" , "");    // post to db.
+                        if(client_id != -1) {   // the db updated successfully.
                             Toast.makeText(NewCustomer.this, "User added successfully", Toast.LENGTH_SHORT).show();
                             finish();
-                        } else {
+                        } else {    // something gone wrong and the db did not updated.
                             Toast.makeText(NewCustomer.this, "User with this phone number already exists!", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else {    // some field are empty.
                         Toast.makeText(NewCustomer.this, "Please make sure all the fields are filled.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
     }
+
+    /* Parse the date and the time to the format of the DB format and return the good format */
     private String createDateTime(String dateReceiver, String timeReceiver) {
-        String[] strings=dateReceiver.split("-");
-        if(!(Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
+        String[] strings = dateReceiver.split("-");
+        if(!(Integer.parseInt(strings[1]) < 10) && Integer.parseInt(strings[0]) < 10) {
             return strings[2] + "-" + strings[1] + "-0" + strings[0] + " " + timeReceiver + ":00";
-        }else  if((Integer.parseInt(strings[1])<10)&&!(Integer.parseInt(strings[0])<10)){
-            return strings[2]+"-0"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
-
-        }else if((Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
-
-            return strings[2]+"-0"+strings[1]+"-0"+strings[0]+" "+timeReceiver+":00";
-
+        }else  if((Integer.parseInt(strings[1]) < 10) && !(Integer.parseInt(strings[0]) < 10)){
+            return strings[2] + "-0" + strings[1] + "-" + strings[0] + " " + timeReceiver + ":00";
+        }else if((Integer.parseInt(strings[1]) < 10) && Integer.parseInt(strings[0]) < 10) {
+            return strings[2] + "-0" + strings[1] + "-0" + strings[0] + " " + timeReceiver + ":00";
         }
-        return strings[2]+"-"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
+        return strings[2] + "-" + strings[1] + "-" + strings[0] + " " + timeReceiver + ":00";
     }
 
+    /* return true or false if any of string are empty */
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") ;
     }
 
+    /* return true or false if any of string are empty */
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment, String time, String date) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
 
+    /* Post the data to the db and return the field number or -1 for error */
     private long postToDB(String name, String phone, String city, String street, String apartment, String dbName, long client_id, String client_name, String date, String dateTime) {
         ContentValues values = new ContentValues();
-        if(dbName.equals(Constants.CLIENTS.TABLE_NAME)) {
+        if(dbName.equals(Constants.CLIENTS.TABLE_NAME)) {   // insert to the db of clients.
             values.put(Constants.CLIENTS.FULL_NAME, name);
             values.put(Constants.CLIENTS.PHONE_NUMBER, phone);
             values.put(Constants.CLIENTS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
-        } else {
+        } else {    // insert to the db of tasks.
             values.put(Constants.TASKS.FULL_NAME, name);
             values.put(Constants.TASKS.PHONE_NUMBER, phone);
             values.put(Constants.TASKS.CLIENT_ID, client_id);
@@ -235,7 +239,7 @@ public class NewCustomer extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
+        onBackPressed();    // go back to the previous screen.
         return true;
     }
 

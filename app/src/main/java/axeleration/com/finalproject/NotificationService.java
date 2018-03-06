@@ -2,7 +2,6 @@ package axeleration.com.finalproject;
 
 import android.Manifest;
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,18 +11,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.telephony.SmsManager;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -31,31 +24,26 @@ import java.util.Locale;
 
 public class NotificationService extends IntentService{
 
-    private Cursor cursor;
     private SQLiteDatabase db;
-    boolean showOnlyOnce=true;
-    boolean flag;
+    boolean showOnlyOnce, flag;
 
     public NotificationService(){
         super("NotificationService");
         flag = true;
+        showOnlyOnce = true;
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        Log.d("temp", "creating service notification");
     }
-
-
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
+        Cursor cursor = null;
         while(flag) {
             try {
                 Thread.sleep(10000);
-                Log.d("temp","Service Runs");
                 if(!db.isOpen()) {
                     return;
                 }
-                cursor=db.query(Constants.TASKS.TABLE_NAME,
+                cursor = db.query(Constants.TASKS.TABLE_NAME,
                         null,
                         Constants.TASKS.IS_SIGN + "=? AND " + Constants.TASKS.DATETIME + ">=? AND " +  Constants.TASKS.DATETIME + "<=?",
                         new String[] {"0", getCurrentDate(), getDate()},
@@ -76,7 +64,8 @@ public class NotificationService extends IntentService{
                 e.printStackTrace();
             }
         }
-
+        if(cursor != null)
+            cursor.close();
     }
 
     @Override
@@ -93,8 +82,6 @@ public class NotificationService extends IntentService{
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Log.d("temp", "inside");
-
             CharSequence name = "my_channel";
             String Description = "This is my channel";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -105,7 +92,8 @@ public class NotificationService extends IntentService{
             mChannel.enableVibration(true);
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             mChannel.setShowBadge(false);
-            notificationManager.createNotificationChannel(mChannel);
+            if(notificationManager != null)
+                notificationManager.createNotificationChannel(mChannel);
         }
         Intent nevIntent = new Intent(Intent.ACTION_VIEW);
         nevIntent.setData(Uri.parse("google.navigation:q=" + address));
@@ -131,7 +119,6 @@ public class NotificationService extends IntentService{
                 .setContentTitle("Package to deliver:")
                 .setContentText("GO to "+ recvName+"\n"+ "from "+ clientName)
                 .addAction(R.drawable.ic_call, "Call",call_pIntent)
-//                .addAction(R.mipmap.ic_launcher, "Kick", call_pIntent)
                 .addAction(R.drawable.ic_navigate,"Navigate",nev_pIntent);
 
         Intent resultIntent = new Intent(this, NotificationService.class);
@@ -141,9 +128,11 @@ public class NotificationService extends IntentService{
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setContentIntent(resultPendingIntent);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+        if(notificationManager != null)
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
 
     }
+
     private String getDate (){
         Calendar c = Calendar.getInstance();
         c.add(Calendar.HOUR, 3);
@@ -156,9 +145,4 @@ public class NotificationService extends IntentService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return sdf.format(c.getTime());
     }
-
-
-
-
-
 }

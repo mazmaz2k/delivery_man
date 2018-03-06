@@ -8,7 +8,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -66,7 +65,6 @@ public class ShowAllTasks extends AppCompatActivity {
                     cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN+"=0",null,null,null,Constants.TASKS.FULL_NAME + " ASC");
                     break;
                 case R.id.sort_by_location:
-                    Log.d("temp","cccccccccccc");
                     updateAllDBLocation();
                     cursor = db.query(Constants.TASKS.TABLE_NAME,null,Constants.TASKS.IS_SIGN + "=0",null,null,null,Constants.TASKS.LOCATION + " ASC");
                     break;

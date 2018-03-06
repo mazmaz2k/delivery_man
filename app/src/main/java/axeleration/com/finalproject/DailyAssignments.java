@@ -148,6 +148,4 @@ public class DailyAssignments extends AppCompatActivity {
                 orderBy + " ASC");
         return cursor;
     }
-
-
 }
