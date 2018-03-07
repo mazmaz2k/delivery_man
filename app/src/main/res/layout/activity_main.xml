@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -17,6 +18,7 @@
             android:layout_weight="1">
             <ImageButton
                 android:id="@+id/addNewTaskBtn"
+                android:contentDescription="@string/new_client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add"
@@ -25,7 +27,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Client"
+                android:text="@string/new_client"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
@@ -38,6 +40,7 @@
 
             <ImageButton
                 android:id="@+id/allTasksBtn"
+                android:contentDescription="@string/all_tasks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/all_tasks"
@@ -46,7 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Tasks"
+                android:text="@string/all_tasks"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
@@ -58,6 +61,7 @@
             android:layout_weight="1">
             <ImageButton
                 android:id="@+id/finishedTaskBtn"
+                android:contentDescription="@string/finish_tasks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/finish_tasks"
@@ -67,7 +71,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Finish Tasks"
+                android:text="@string/finish_tasks"
                 android:layout_gravity="center" />
         </LinearLayout>
 
@@ -79,7 +83,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -88,6 +93,7 @@
             android:layout_weight="1">
             <ImageButton
                 android:id="@+id/allClients"
+                android:contentDescription="@string/all_clients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add"
@@ -96,7 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Clients"
+                android:text="@string/all_clients"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
@@ -109,6 +115,7 @@
 
             <ImageButton
                 android:id="@+id/daily_assignments"
+                android:contentDescription="@string/daily_assignments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/all_tasks"
@@ -130,6 +137,7 @@
             android:layout_weight="1">
             <ImageButton
                 android:id="@+id/statistic"
+                android:contentDescription="@string/statics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/finish_tasks"

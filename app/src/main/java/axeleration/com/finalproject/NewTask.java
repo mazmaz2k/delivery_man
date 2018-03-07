@@ -21,16 +21,15 @@ public class NewTask extends AppCompatActivity {
     private int selectedDate, selectedMonth, selectedYear;
     private SQLiteDatabase db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase();
-        final int clientId = getIntent().getIntExtra("client_id",0); //receive client id from another Intent
-        final String clientName = getIntent().getStringExtra("clientName"); //receive client name from another Intent
-        //find all views from layout
+        db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open the db.
+        final int clientId = getIntent().getIntExtra("client_id",0); // receive client id from another Intent.
+        final String clientName = getIntent().getStringExtra("clientName"); // receive client name from another Intent.
+        /* find all the views from layout */
         final EditText name = findViewById(R.id.fullNameEditTextNT);
         final EditText phone = findViewById(R.id.phoneNumberEditTextNT);
         final EditText city = findViewById(R.id.cityAddressNT);
@@ -41,8 +40,8 @@ public class NewTask extends AppCompatActivity {
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {   //when press on time picker initialize data
-                final Dialog dialog = new Dialog(NewTask.this);
+            public void onClick(View v) {   // when press on time picker initialize data.
+                final Dialog dialog = new Dialog(NewTask.this); // custom dialog.
                 dialog.setContentView(R.layout.timepicker);
                 dialog.show();
                 final TimePicker timePicker = dialog.findViewById(R.id.timePicker1);
@@ -56,6 +55,7 @@ public class NewTask extends AppCompatActivity {
                         int hours = timePicker.getCurrentHour();
                         String strTime;
                         String strHour;
+                        /* set the good format of the time xx:xx */
                         if(hours < 10) {
                             strHour = "0" + hours;
                         } else {
@@ -75,9 +75,8 @@ public class NewTask extends AppCompatActivity {
 
         date.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {    //when enter date picker initialize data
-                // custom dialog
-                final Dialog dialog = new Dialog(NewTask.this);
+            public void onClick(View view) {    // when enter date picker initialize data.
+                final Dialog dialog = new Dialog(NewTask.this); // custom dialog.
                 dialog.setContentView(R.layout.datepicker);
                 dialog.setTitle("");
 
@@ -97,7 +96,6 @@ public class NewTask extends AppCompatActivity {
                             date.setText(dateString);
                             dialog.dismiss();
                         }else {
-
                             if(selectedDate != dayOfMonth){
                                 date.setText(dateString);
                                 dialog.dismiss();
@@ -121,43 +119,43 @@ public class NewTask extends AppCompatActivity {
         sumBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {   //submit button listener
+            public void onClick(View v) {   // submit button listener.
+                /* get all the string from views */
                 String nameReceiver = name.getText().toString();
                 String phoneReceiver = phone.getText().toString();
                 String cityReceiver = city.getText().toString();
                 String streetReceiver = street.getText().toString();
                 String apartmentReceiver = apartment.getText().toString();
                 String timeReceiver = time.getText().toString();
-                String dateReceiver= date.getText().toString();
+                String dateReceiver = date.getText().toString();
                 
-                String dateTime=createDateTime(dateReceiver,timeReceiver);
-                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){ //check if all field's are filled
+                String dateTime = createDateTime(dateReceiver,timeReceiver);
+                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){ // check if all fields are filled.
                     postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, dateTime);
                 }
             }
         });
 
     }
-    /* create time with custom format*/
+    /* create time with custom format */
     private String createDateTime(String dateReceiver, String timeReceiver) {
         String[] strings = dateReceiver.split("-");
         if(!(Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
             return strings[2] + "-" + strings[1] + "-0" + strings[0] + " " + timeReceiver + ":00";
         }else  if((Integer.parseInt(strings[1])<10)&&!(Integer.parseInt(strings[0])<10)){
             return strings[2]+"-0"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
-
         }else if((Integer.parseInt(strings[1])<10)&&Integer.parseInt(strings[0])<10) {
-
             return strings[2]+"-0"+strings[1]+"-0"+strings[0]+" "+timeReceiver+":00";
         }
         return strings[2]+"-"+strings[1]+"-"+strings[0]+" "+timeReceiver+":00";
     }
 
-    //check if all field's are filled
+    /* return true is all the fields are not empty */
     private boolean checkIfAnyEmpty(String name, String phone, String city, String street, String apartment, String time, String date) {
         return name.equals("") || phone.equals("") || city.equals("") || street.equals("") || apartment.equals("") || time.equals("") || date.equals("");
     }
-    /* put values in Task table*/
+
+    /* put values in task table */
     private void postToDB(String name, String phone, String city, String street, String apartment, long client_id, String clientName, String date, String dateTime) {
         ContentValues values = new ContentValues();
         values.put(Constants.TASKS.FULL_NAME, name);
@@ -169,7 +167,7 @@ public class NewTask extends AppCompatActivity {
         values.put(Constants.TASKS.IS_SIGN, 0);
         values.put(Constants.TASKS.ADDRESS, "Israel " + city + " " + street + " " + apartment);
         long x = db.insert(Constants.TASKS.TABLE_NAME, null, values);
-        if(x != -1) { //check if insert when without error
+        if(x != -1) { // check if the data insert was successfully.
             Toast.makeText(NewTask.this, "New task added successfully", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(NewTask.this, "Some error occurred", Toast.LENGTH_SHORT).show();
@@ -179,7 +177,7 @@ public class NewTask extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();    //enable bacj button
+        onBackPressed();   // goes to the previous activity.
         return true;
     }
 }

@@ -3,18 +3,12 @@ package axeleration.com.finalproject;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 /* This class for showing all future daily tasks. */
 public class DailyAssignments extends AppCompatActivity {
@@ -74,51 +68,14 @@ public class DailyAssignments extends AppCompatActivity {
         for(int i = 0; i < cursor.getCount(); i++) {    // for each row in DB.
             int ID = cursor.getInt(cursor.getColumnIndex(Constants.TASKS._ID)); // get the ID.
             String address = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));  // get the ADDRESS.
-            Location location = getLocation(address);   // gets the location by address string.
-            ContentValues values = getContentValues(location);  // values that should be pushed into db.
-            if(values == null) {    // nothing to push
+            Location location = StaticFunctions.getLocation(this, address);   // gets the location by address string.
+            ContentValues values = StaticFunctions.getContentValues(location);  // values that should be set in the db.
+            if(values == null) {    // nothing to set.
                 continue;
             }
             db.update(Constants.TASKS.TABLE_NAME, values, Constants.TASKS._ID + "=?", new String[] {String.valueOf(ID)});   // update the DB ADDRESS field.
             cursor.moveToNext();    // go to the next row.
         }
-    }
-
-    /* This function returns a new location object from address string */
-    private Location getLocation(String address) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        Address addressObj = null;
-        try {
-            List<Address> addresses = geocoder.getFromLocationName(address, 1); // get address list from string
-            addressObj = addresses.get(0);  // get first object address
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(addressObj == null) {    // the address is invalid or not found in map.
-            Toast.makeText(this, "The address is invalid!", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        double longitude = addressObj.getLongitude();   // get longitude of the address.
-        double latitude = addressObj.getLatitude(); // get latitude of the address.
-
-        Location location = new Location("");   // new location object.
-        location.setLongitude(longitude);   // set location longitude.
-        location.setLatitude(latitude);     // set location latitude.
-
-        return location;
-    }
-
-    /* This function will return a new contentValues object with the new location of the address from current location */
-    private ContentValues getContentValues(Location location) {
-        if(location == null)    // location not found.
-            return null;
-        ContentValues values = new ContentValues();
-        Location myLocation = MainActivity.myCurrentLocation;   // get my current location from static function in main activity.
-        if(myLocation == null) {    // my location is null on emulators.
-            return null;
-        }
-        values.put(Constants.TASKS.LOCATION, myLocation.distanceTo(location));  // put location values in content values.
-        return values;
     }
 
     /* Update the view list onResume the activity */

@@ -50,4 +50,8 @@
     <string name="urgent_tasks">Urgent Tasks:</string>
     <string name="finish_from_all">Finish from All:</string>
     <string name="finish_from_daily">Finish from daily:</string>
+    <string name="all_clients">All Clients</string>
+    <string name="finish_tasks">Finish Tasks</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="new_client">New Client</string>
 </resources>
