@@ -21,7 +21,7 @@
                 android:contentDescription="@string/new_client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/add"
+                android:src="@mipmap/new_client"
                 android:layout_gravity="center"
                 style="@style/Widget.AppCompat.Button.Borderless" />
             <TextView
@@ -96,7 +96,7 @@
                 android:contentDescription="@string/all_clients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/add"
+                android:src="@mipmap/all_clients"
                 android:layout_gravity="center"
                 style="@style/Widget.AppCompat.Button.Borderless" />
             <TextView
@@ -118,7 +118,7 @@
                 android:contentDescription="@string/daily_assignments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/all_tasks"
+                android:src="@mipmap/daily_task"
                 android:layout_gravity="center"
                 style="@style/Widget.AppCompat.Button.Borderless"/>
 
@@ -137,10 +137,10 @@
             android:layout_weight="1">
             <ImageButton
                 android:id="@+id/statistic"
-                android:contentDescription="@string/statics"
+                android:contentDescription="@string/statistics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/finish_tasks"
+                android:src="@mipmap/statistics"
                 android:layout_gravity="center"
                 style="@style/Widget.AppCompat.Button.Borderless"/>
 
@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/statics" />
+                android:text="@string/statistics" />
         </LinearLayout>
 
     </LinearLayout>
