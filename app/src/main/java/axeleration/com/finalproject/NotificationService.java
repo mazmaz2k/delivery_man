@@ -16,20 +16,22 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 /* This is a service that runs for all app life and check if there is any urgent task and show them in notification */
 public class NotificationService extends IntentService{
 
     private SQLiteDatabase db;
-    boolean showOnlyOnce,  // in charge to show the notification only once for each task.
-            flag; // in charge to close the thread repeat.
+    boolean flag; // in charge to close the thread repeat.
+    String phoneOfLastUrgent; // in charge to show the notification only once for each task.
 
     /* constructor */
     public NotificationService(){
         super("NotificationService");
         flag = true;
-        showOnlyOnce = true;
+        phoneOfLastUrgent = "";
+        Log.d("temp","somthing- constructor");
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open the db.
     }
 
@@ -38,7 +40,7 @@ public class NotificationService extends IntentService{
         Cursor cursor = null;
         while(flag) {
             try {
-                Thread.sleep(10000);  // thread that sleep 10 sec.
+                Thread.sleep(30000);  // thread that sleep 30 sec.
                 if(!db.isOpen()) {  // check if DB is close and if so exit.
                     return;
                 }
@@ -49,18 +51,18 @@ public class NotificationService extends IntentService{
                         null,
                         null,
                         Constants.TASKS.DATETIME + " ASC");
-
-                if(cursor.getCount() != 0 && showOnlyOnce)
-                {
+                cursor.moveToFirst();
+                if(phoneOfLastUrgent.equals(cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER))))
+                   continue;
                     /* init all information from the first task in the table */
-                    cursor.moveToFirst();
-                    final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
-                    final String clientName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.CLIENT_NAME));
-                    final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
-                    final String address = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));
-                    setNotificationCall(receiverName, clientName, phoneNumber, address);
-                    showOnlyOnce = false;
-                }
+                final String phoneNumber = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));
+                final String clientName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.CLIENT_NAME));
+                final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
+                final String address = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));
+                setNotificationCall(receiverName, clientName, phoneNumber, address);
+                Log.d("temp","something- in tread");
+                phoneOfLastUrgent = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));   // Receiver phone number string.
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

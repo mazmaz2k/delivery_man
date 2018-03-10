@@ -1,21 +1,32 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:layout_marginStart="30dp"
-    android:layout_marginEnd="30dp">
+    android:paddingEnd="30dp"
+    android:paddingStart="30dp"
+    android:layoutDirection="ltr"
+    android:paddingTop="49dp"
+    android:background="@color/white">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/statics"
+        android:src="@mipmap/statpic"
+        android:paddingBottom="49.9px"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/finish_from_daily"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:padding="4dp"/>
         <TextView
             android:id="@+id/finishFromDaily"
             android:layout_width="match_parent"
@@ -26,12 +37,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/finish_from_all"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:padding="4dp"/>
         <TextView
             android:id="@+id/finishFromAll"
             android:layout_width="match_parent"
@@ -42,12 +55,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/urgent_tasks"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:padding="4dp"/>
         <TextView
             android:id="@+id/urgentTasks"
             android:layout_width="match_parent"
@@ -58,12 +73,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/finish_last_week_tasks"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:padding="4dp"/>
         <TextView
             android:id="@+id/finishThisWeekTasks"
             android:layout_width="match_parent"
@@ -74,12 +91,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/finish_last_month_tasks"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:padding="4dp"/>
         <TextView
             android:id="@+id/finishThisMonthsTasks"
             android:layout_width="match_parent"

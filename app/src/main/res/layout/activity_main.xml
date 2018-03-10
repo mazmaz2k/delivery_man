@@ -40,7 +40,7 @@
 
             <ImageButton
                 android:id="@+id/allTasksBtn"
-                android:contentDescription="@string/all_tasks"
+                android:contentDescription="@string/title_activity_show_all_tasks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/all_tasks"
@@ -49,7 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/all_tasks"
+                android:text="@string/title_activity_show_all_tasks"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
@@ -115,7 +115,7 @@
 
             <ImageButton
                 android:id="@+id/daily_assignments"
-                android:contentDescription="@string/daily_assignments"
+                android:contentDescription="@string/daily_tasks_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/daily_task"
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/daily_assignments" />
+                android:text="@string/daily_tasks_label" />
         </LinearLayout>
 
 

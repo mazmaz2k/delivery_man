@@ -56,7 +56,7 @@ public class Statistic extends AppCompatActivity {
         int urgentTasksCount = cursor.getCount();
 
         /* String format of data */
-        String finishFromDailyString = numOfDaily_finish + " / " + numOfDaily;
+        String finishFromDailyString = numOfDaily_finish + " / " + (numOfDaily+numOfDaily_finish);
         String finishFromAllString = count_finishFromAll + " / "+ (count_All_tasks + count_finishFromAll);
         String urgentTasksString = urgentTasksCount + " / " + numOfDaily;
         String finishThisWeekTasksString = String.valueOf(count_finishThisWeekTasks);
