@@ -129,7 +129,7 @@ public class ShowAllTasks extends AppCompatActivity {
                     null,
                     Constants.TASKS.IS_SIGN + "=?",
                     new String[]{"0"},
-                    null,null,null);
+                    null,null,orderBy);
         }else { // find all the unfinished tasks for specific client.
             cursor = db.query(Constants.TASKS.TABLE_NAME,
                     null,

@@ -47,7 +47,11 @@ public class DailyAssignments extends AppCompatActivity {
                 cursor = getTaskCursor(Constants.TASKS.FULL_NAME);  // get cursor order by full name.
                 break;
             case R.id.sort_by_location:   // sort by location
-                updateAllDBLocation();      //  update the distance between us and the client in the DB.
+                try {
+                    updateAllDBLocation();      //  update the distance between us and the client in the DB.
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 cursor = getTaskCursor(Constants.TASKS.LOCATION);   // get cursor order by location latitude and longitude.
                 break;
             default:
