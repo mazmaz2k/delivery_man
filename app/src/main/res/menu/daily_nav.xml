@@ -12,8 +12,4 @@
     <item
         android:id="@+id/sort_by_location"
         android:title="@string/sort_by_location" />
-    <item
-        android:id="@+id/sort_by_tooLate"
-        android:title="@string/sort_by_tooLate" />
-
 </menu>

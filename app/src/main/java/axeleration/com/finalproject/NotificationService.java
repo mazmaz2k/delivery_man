@@ -51,6 +51,9 @@ public class NotificationService extends IntentService{
                         null,
                         null,
                         Constants.TASKS.DATETIME + " ASC");
+                if(cursor.getCount()==0){
+                    continue;
+                }
                 cursor.moveToFirst();
                 if(phoneOfLastUrgent.equals(cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER))))
                    continue;

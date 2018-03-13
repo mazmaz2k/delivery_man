@@ -47,4 +47,7 @@
     <string name="all_tasks">All Tasks</string>
     <string name="new_client">New Client</string>
     <string name="statistics">Statistics</string>
+    <string name="no_tasks_yet_nplease_enter_new_task">No Tasks yet!! \nPlease enter new task.</string>
+    <string name="you_dont_have_any_clients_yet_n_please_add_new_clients">You dont have any clients yet!! \n please add new clients.</string>
+    <string name="sort_by_tooLate">Sort too Late</string>
 </resources>

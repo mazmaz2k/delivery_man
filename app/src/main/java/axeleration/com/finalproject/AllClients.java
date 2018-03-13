@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /* This class for showing all clients activity. */
 public class AllClients extends AppCompatActivity {
@@ -15,16 +17,22 @@ public class AllClients extends AppCompatActivity {
     private SQLiteDatabase db;
     private ClientCursorAdapter adapter;
     private Cursor cursor;
-
+    private TextView noClientYet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_clients);
 
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open db from singleton object.
-
+        noClientYet=findViewById(R.id.noClientYet);
         list = findViewById(R.id.listView); // get a list view.
         cursor = db.query(Constants.CLIENTS.TABLE_NAME, null, null, null, null, null, null);    // show all client from db.
+        if(cursor.getCount()==0){
+            noClientYet.setVisibility(View.VISIBLE);
+        }
+        else{
+            noClientYet.setVisibility(View.INVISIBLE);
+        }
         adapter = new ClientCursorAdapter(this, cursor);    // initial the custom cursor adapter.
         list.setAdapter(adapter);   // set adapter to the list view.
     }
@@ -48,6 +56,12 @@ public class AllClients extends AppCompatActivity {
         }
         /* real time update the list view */
         adapter = new ClientCursorAdapter(this,cursor);
+        if(cursor.getCount()==0){
+            noClientYet.setVisibility(View.VISIBLE);
+        }
+        else{
+            noClientYet.setVisibility(View.INVISIBLE);
+        }
         list.setAdapter(adapter);
         return true;
     }

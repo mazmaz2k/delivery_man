@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -36,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ListView listView;
     private SQLiteDatabase db;
     private Intent intent;  // Intent for switching between activities in the application.
-
+    private TextView noTaskYet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        noTaskYet=findViewById(R.id.noTaskYet);
         /* Request for permissions if the permissions is not granted. */
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -172,6 +173,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Constants.TASKS.DATETIME + " ASC");
         cursor.moveToFirst();
         TaskCursorAdapter adapter = new TaskCursorAdapter(this, cursor);
+        if(cursor.getCount()==0){
+            noTaskYet.setVisibility(View.VISIBLE);
+        }
+        else {
+            noTaskYet.setVisibility(View.INVISIBLE);
+
+        }
         listView.setAdapter(adapter);
     }
 

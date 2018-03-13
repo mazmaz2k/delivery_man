@@ -6,9 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /* This activity will show all Tasks and able to sort them */
 public class ShowAllTasks extends AppCompatActivity {
@@ -18,12 +21,13 @@ public class ShowAllTasks extends AppCompatActivity {
     private SQLiteDatabase db;
     private TaskCursorAdapter adapter;
     private int client_id;
+    private TextView noTaskYet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all_tasks);
-
+        noTaskYet=findViewById(R.id.noTaskYet);
         client_id = getIntent().getIntExtra("client_id",-1);    // receive client id from another Intent
         listView = findViewById(R.id.listViewTaskes);   // find list view.
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open the db.
@@ -41,20 +45,18 @@ public class ShowAllTasks extends AppCompatActivity {
         super.onResume();
         if(client_id == -1){    // find all the unfinished tasks.
             cursor =getCursor(client_id,null);
-//                    db.query(Constants.TASKS.TABLE_NAME,
-//                    null,
-//                    Constants.TASKS.IS_SIGN + "=?",
-//                    new String[]{"0"},
-//                    null,null,null);
+
         }else { // find all the unfinished tasks for specific client.
             cursor =getCursor(client_id,null);
-//                    db.query(Constants.TASKS.TABLE_NAME,
-//                    null,
-//                    Constants.TASKS.CLIENT_ID+"=?" + " AND " + Constants.TASKS.IS_SIGN + "=?",
-//                    new String[] {String.valueOf(client_id), "0"},
-//                    null, null, null);
         }
         adapter = new TaskCursorAdapter(this, cursor);  // update the adapter.
+        if(cursor.getCount()==0){
+            noTaskYet.setVisibility(View.VISIBLE);
+        }
+        else {
+            noTaskYet.setVisibility(View.INVISIBLE);
+
+        }
         listView.setAdapter(adapter);
     }
 
@@ -64,42 +66,37 @@ public class ShowAllTasks extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.sort_by_date: // sort by date.
                     cursor = getCursor(client_id,Constants.TASKS.DATETIME + " ASC");
-//                            db.query(Constants.TASKS.TABLE_NAME,
-//                            null,
-//                            Constants.TASKS.IS_SIGN + "=?",
-//                            new String[]{"0"},
-//                            null,null,
-//                            Constants.TASKS.DATETIME + " ASC");
-//                    break;
-                case R.id.sort_by_name: // sort by name.
-                    cursor = getCursor(client_id,Constants.TASKS.FULL_NAME + " ASC");
-
-//                            db.query(Constants.TASKS.TABLE_NAME,
-//                            null,
-//                            Constants.TASKS.IS_SIGN+"=?",
-//                            new String[]{"0"},
-//                            null,null,
-//                            Constants.TASKS.FULL_NAME + " ASC");
                     break;
-                case R.id.sort_by_location: // sort by location.
-
+            case R.id.sort_by_name: // sort by name.
+                    cursor = getCursor(client_id,Constants.TASKS.FULL_NAME + " ASC");
+                    break;
+            case R.id.sort_by_location: // sort by location.
                     try {
                          updateAllDBLocation();  //  update the distance between us and the client in the DB.
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     cursor =getCursor(client_id,Constants.TASKS.LOCATION + " ASC");
-
-//                            db.query(Constants.TASKS.TABLE_NAME,
-//                            null,
-//                            Constants.TASKS.IS_SIGN + "=?",
-//                            new String[]{"0"},
-//                            null,null,Constants.TASKS.LOCATION + " ASC");
                     break;
-                default:
+            case R.id.sort_by_tooLate: //// sort by tasks that passe but not marked as done.
+                    cursor  =  db.query(Constants.TASKS.TABLE_NAME,
+                            null,
+                            Constants.TASKS.DATETIME + "<?" + " AND " + Constants.TASKS.IS_SIGN + "=?",
+                            new String[] {StaticFunctions.getCurrentDate("yyyy-MM-dd HH:mm:ss"), "0"},
+                            null, null, null);
+                    Log.d("temp"," "+StaticFunctions.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
+                    break;
+            default:
                     onBackPressed();    // goes to the previous activity.
         }
         adapter = new TaskCursorAdapter(this,cursor);   // update the adapter.
+        if(cursor.getCount()==0){
+            noTaskYet.setVisibility(View.VISIBLE);
+        }
+        else {
+            noTaskYet.setVisibility(View.INVISIBLE);
+
+        }
         listView.setAdapter(adapter);
         return true;
     }

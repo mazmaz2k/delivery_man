@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /* This class for showing all future daily tasks. */
 public class DailyAssignments extends AppCompatActivity {
@@ -17,18 +19,20 @@ public class DailyAssignments extends AppCompatActivity {
     private SQLiteDatabase db;
     private TaskCursorAdapter adapter;
     private ListView listView;
+    private TextView noTaskYet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_assignments);
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open db from singleton object.
+        noTaskYet=findViewById(R.id.noTaskYet);
     }
 
     /* Menu options initialize */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.navigation,menu);
+        getMenuInflater().inflate(R.menu.daily_nav,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -85,6 +89,13 @@ public class DailyAssignments extends AppCompatActivity {
         listView = findViewById(R.id.listViewTaskes);
         cursor = getTaskCursor(Constants.TASKS.DATETIME);
         adapter = new TaskCursorAdapter(this, cursor);
+        if(cursor.getCount()==0){
+            noTaskYet.setVisibility(View.VISIBLE);
+        }
+        else {
+            noTaskYet.setVisibility(View.INVISIBLE);
+
+        }
         listView.setAdapter(adapter);
     }
 
