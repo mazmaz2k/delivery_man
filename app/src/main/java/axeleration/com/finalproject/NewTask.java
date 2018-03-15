@@ -2,6 +2,7 @@ package axeleration.com.finalproject;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class NewTask extends AppCompatActivity {
         final EditText apartment = findViewById(R.id.apartmentNumberNT);
         final EditText time = findViewById(R.id.timeToDeliverNT);
         final EditText date = findViewById(R.id.dateToDeliverNT);
-
+        final Button newTask = findViewById(R.id.create_another_task_btn);
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   // when press on time picker initialize data.
@@ -129,13 +130,40 @@ public class NewTask extends AppCompatActivity {
                 String timeReceiver = time.getText().toString();
                 String dateReceiver = date.getText().toString();
                 
-                String dateTime = createDateTime(dateReceiver,timeReceiver);
                 if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){ // check if all fields are filled.
+                    String dateTime = createDateTime(dateReceiver,timeReceiver);
                     postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, dateTime);
+                    finish();
+                }else{
+                    Toast.makeText(NewTask.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        newTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nameReceiver = name.getText().toString();
+                String phoneReceiver = phone.getText().toString();
+                String cityReceiver = city.getText().toString();
+                String streetReceiver = street.getText().toString();
+                String apartmentReceiver = apartment.getText().toString();
+                String timeReceiver = time.getText().toString();
+                String dateReceiver = date.getText().toString();
+
+                if(!checkIfAnyEmpty(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,timeReceiver,dateReceiver)){ // check if all fields are filled.
+                    String dateTime = createDateTime(dateReceiver,timeReceiver);
+                    postToDB(nameReceiver,phoneReceiver,cityReceiver,streetReceiver,apartmentReceiver,clientId, clientName, dateReceiver, dateTime);
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(NewTask.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+        });
     }
     /* create time with custom format */
     private String createDateTime(String dateReceiver, String timeReceiver) {
@@ -172,7 +200,7 @@ public class NewTask extends AppCompatActivity {
         } else {
             Toast.makeText(NewTask.this, "Some error occurred", Toast.LENGTH_SHORT).show();
         }
-        finish();
+
     }
 
     @Override

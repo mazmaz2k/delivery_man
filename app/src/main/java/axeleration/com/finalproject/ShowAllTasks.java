@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +83,6 @@ public class ShowAllTasks extends AppCompatActivity {
                             Constants.TASKS.DATETIME + "<?" + " AND " + Constants.TASKS.IS_SIGN + "=?",
                             new String[] {StaticFunctions.getCurrentDate("yyyy-MM-dd HH:mm:ss"), "0"},
                             null, null, null);
-                    Log.d("temp"," "+StaticFunctions.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
                     break;
             default:
                     onBackPressed();    // goes to the previous activity.

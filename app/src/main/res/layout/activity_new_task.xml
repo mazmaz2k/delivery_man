@@ -69,9 +69,15 @@
         android:focusableInTouchMode="false"
         android:drawableStart="@drawable/ic_time"/>
     <Button
-        android:id="@+id/sum_new_task_btn"
+    android:id="@+id/sum_new_task_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/submitBtn"
+        style="@style/Widget.AppCompat.Button.Colored"/>
+    <Button
+        android:id="@+id/create_another_task_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submitBtn"
+        android:text="create another task"
         style="@style/Widget.AppCompat.Button.Colored"/>
 </LinearLayout>

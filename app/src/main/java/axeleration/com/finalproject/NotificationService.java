@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 /* This is a service that runs for all app life and check if there is any urgent task and show them in notification */
@@ -31,7 +30,6 @@ public class NotificationService extends IntentService{
         super("NotificationService");
         flag = true;
         phoneOfLastUrgent = "";
-        Log.d("temp","somthing- constructor");
         db = DBHelperSingleton.getInstanceDBHelper(this).getReadableDatabase(); // open the db.
     }
 
@@ -63,7 +61,6 @@ public class NotificationService extends IntentService{
                 final String receiverName = cursor.getString(cursor.getColumnIndex(Constants.TASKS.FULL_NAME));
                 final String address = cursor.getString(cursor.getColumnIndex(Constants.TASKS.ADDRESS));
                 setNotificationCall(receiverName, clientName, phoneNumber, address);
-                Log.d("temp","something- in tread");
                 phoneOfLastUrgent = cursor.getString(cursor.getColumnIndex(Constants.TASKS.PHONE_NUMBER));   // Receiver phone number string.
 
             } catch (InterruptedException e) {
