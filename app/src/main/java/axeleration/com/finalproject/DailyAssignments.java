@@ -48,7 +48,13 @@ public class DailyAssignments extends AppCompatActivity {
                 break;
             case R.id.sort_by_location:   // sort by location
                 try {
-                    updateAllDBLocation();      //  update the distance between us and the client in the DB.
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateAllDBLocation();      //  update the distance between us and the client in the DB.
+
+                        }
+                    });
                 }catch (Exception e){
                     e.printStackTrace();
                 }
