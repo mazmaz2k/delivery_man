@@ -80,7 +80,7 @@ public class ShowAllTasks extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    cursor =getCursor(client_id,Constants.TASKS.LOCATION + " ASC");
+                    cursor =getCursor(client_id,Constants.TASKS.LOCATION + " DESC");
                     break;
             case R.id.sort_by_tooLate: //// sort by tasks that passe but not marked as done.
                     cursor  =  db.query(Constants.TASKS.TABLE_NAME,

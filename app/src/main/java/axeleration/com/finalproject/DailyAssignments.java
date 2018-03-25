@@ -41,10 +41,10 @@ public class DailyAssignments extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.sort_by_date:     // sort by date
-                cursor = getTaskCursor(Constants.TASKS.DATETIME);   // get cursor order by date time.
+                cursor = getTaskCursor(Constants.TASKS.DATETIME + " ASC");   // get cursor order by date time.
                 break;
             case R.id.sort_by_name:     // sort by name
-                cursor = getTaskCursor(Constants.TASKS.FULL_NAME);  // get cursor order by full name.
+                cursor = getTaskCursor(Constants.TASKS.FULL_NAME + " ASC");  // get cursor order by full name.
                 break;
             case R.id.sort_by_location:   // sort by location
                 try {
@@ -58,7 +58,7 @@ public class DailyAssignments extends AppCompatActivity {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                cursor = getTaskCursor(Constants.TASKS.LOCATION);   // get cursor order by location latitude and longitude.
+                cursor = getTaskCursor(Constants.TASKS.LOCATION +" DESC");   // get cursor order by location latitude and longitude.
                 break;
             default:
                 onBackPressed();        // back button pressed.
@@ -123,7 +123,7 @@ public class DailyAssignments extends AppCompatActivity {
                 new String[] {"0", StaticFunctions.getCurrentDate("d-M-yyyy"), StaticFunctions.getCurrentDate("yyyy-MM-dd HH:mm:ss")},
                 null,
                 null,
-                orderBy + " ASC");
+                orderBy );
         return cursor;
     }
 }
